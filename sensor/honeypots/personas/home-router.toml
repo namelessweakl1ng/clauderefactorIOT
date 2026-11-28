@@ -1,0 +1,60 @@
+# The existing Nexora router web UI plus the UPnP and DNS surface real home
+# routers expose on the LAN side.
+id = "home-router"
+version = 1
+name = "Nexora NR-1800 Wireless Router"
+device_type = "router"
+vendor = "Nexora"
+model = "NR-1800"
+firmware = "1.8.3"
+description = "Legacy Nexora web persona plus SSDP/IGD discovery, a UPnP description document, and an authoritative-only DNS zone."
+enabled = true
+
+[fingerprint]
+hostname = "nexora-gw"
+
+[credentials]
+accept = [["admin", "admin"]]
+
+[[services]]
+name = "router"
+plugin = "nexora-router-http"
+port = 8080
+public_port = 8080
+honeypot_id = "router-01"
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 49152
+public_port = 49152
+
+[services.options]
+server = "Linux/3.14 UPnP/1.1 MiniUPnPd/2.1"
+
+[services.options.pages."/rootDesc.xml"]
+content_type = "text/xml"
+body = "<?xml version=\"1.0\"?><root xmlns=\"urn:schemas-upnp-org:device-1-0\"><device><deviceType>urn:schemas-upnp-org:device:InternetGatewayDevice:1</deviceType><friendlyName>$name</friendlyName><manufacturer>$vendor</manufacturer><modelName>$model</modelName><modelNumber>$firmware</modelNumber></device></root>"
+
+[[services]]
+name = "ssdp"
+plugin = "ssdp"
+port = 1901
+public_port = 1900
+
+[services.options]
+location_port = 49152
+
+[[services]]
+name = "dns"
+plugin = "dns"
+port = 5353
+public_port = 53
+
+[services.options]
+zone = "lan"
+version = "dnsmasq-2.80"
+
+[services.options.records]
+"nexora-gw.lan" = "192.168.50.1"
+"printer.lan" = "192.168.50.31"

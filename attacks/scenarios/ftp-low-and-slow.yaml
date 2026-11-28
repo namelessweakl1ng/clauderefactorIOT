@@ -1,0 +1,39 @@
+id: ftp-low-and-slow
+name: Low-and-slow FTP password guessing
+description: Six failed logins spaced 50 seconds apart, designed to stay under naive per-minute thresholds.
+trial_kind: attack
+target_services:
+- ftp
+expected_detection: BRUTE_FORCE
+severity: medium
+models: T1110.001
+steps:
+- service: ftp
+  port: 2121
+  username: admin
+  password: password
+- service: ftp
+  port: 2121
+  username: admin
+  password: admin123
+  pause_before: 50
+- service: ftp
+  port: 2121
+  username: admin
+  password: homevault
+  pause_before: 50
+- service: ftp
+  port: 2121
+  username: admin
+  password: letmein
+  pause_before: 50
+- service: ftp
+  port: 2121
+  username: admin
+  password: qwerty
+  pause_before: 50
+- service: ftp
+  port: 2121
+  username: admin
+  password: Passw0rd!
+  pause_before: 50

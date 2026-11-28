@@ -1,0 +1,14 @@
+id: tftp-implant-upload
+name: TFTP implant upload
+description: 'TFTP WRQ of a binary: the push-style infection used by IoT botnets on devices with TFTP servers. Always refused.'
+trial_kind: attack
+target_services:
+- tftp
+expected_detection: MALWARE_DOWNLOAD
+severity: high
+models: T1105
+steps:
+- service: tftp
+  operation: write
+  files:
+  - dvrHelper

@@ -1,0 +1,20 @@
+id: gateway-mqtt-command-injection
+name: MQTT topic enumeration and command injection
+description: Connects anonymously, subscribes to the '#' wildcard, then publishes an 'off' command to an HVAC set topic.
+trial_kind: attack
+target_services:
+- mqtt
+expected_detection: UNAUTHORIZED_COMMAND
+severity: high
+models: T0861 -> T0855
+steps:
+- service: mqtt
+  operation: connect
+  client_id: mosq-7f3a
+- service: mqtt
+  operation: subscribe
+  topic: '#'
+- service: mqtt
+  operation: publish
+  topic: devices/hvac-01/set
+  message: '{"mode":"off"}'

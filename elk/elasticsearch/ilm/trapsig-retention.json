@@ -1,0 +1,23 @@
+{
+  "policy": {
+    "_meta": {
+      "description": "TRAPSIG retention for dated raw indices (events, dead-letter). Delete min_age is the research retention window; edit it to keep data longer or shorter, then re-run install-templates.sh."
+    },
+    "phases": {
+      "hot": {
+        "min_age": "0ms",
+        "actions": {
+          "set_priority": {
+            "priority": 100
+          }
+        }
+      },
+      "delete": {
+        "min_age": "30d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}

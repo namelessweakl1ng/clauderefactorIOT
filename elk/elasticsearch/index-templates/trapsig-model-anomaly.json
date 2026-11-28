@@ -1,0 +1,63 @@
+{
+  "index_patterns": [
+    "trapsig-model-anomaly"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "model_version": {
+          "type": "keyword"
+        },
+        "feature_schema_version": {
+          "type": "keyword"
+        },
+        "trained_at": {
+          "type": "date"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "keyword"
+        },
+        "threshold": {
+          "type": "float"
+        },
+        "trained_on": {
+          "type": "integer"
+        },
+        "sample_size": {
+          "type": "integer"
+        },
+        "seed": {
+          "type": "long"
+        },
+        "trees": {
+          "type": "object",
+          "enabled": false
+        },
+        "bounds": {
+          "type": "object",
+          "enabled": false
+        },
+        "medians": {
+          "type": "object",
+          "enabled": false
+        },
+        "feature_names": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "Isolation-forest anomaly model generations",
+    "trapsig_schema_version": "2"
+  }
+}

@@ -1,0 +1,16 @@
+id: redis-cache-read-control
+name: Redis cache read (control)
+description: PING and two GETs, as the analytics service on the edge server does.
+trial_kind: control
+target_services:
+- redis
+expected_detection: null
+severity: low
+steps:
+- service: redis
+  commands:
+  - - PING
+  - - GET
+    - sensor:last
+  - - GET
+    - sensor:count

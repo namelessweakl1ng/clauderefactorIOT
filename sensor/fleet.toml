@@ -1,0 +1,61 @@
+# Default fleet layout: which personas each sensor device runs.
+#
+# This is the seed the backend serves until an admin edits a sensor's assignment
+# in the console (Sensors & Personas -> Fleet). Every agent then pulls its own
+# assignment from the backend, so this file only matters for first start and as
+# the offline fallback.
+#
+# bind_ip: leave empty to listen on all of the host's addresses. To give a
+# persona its own IP (more realistic: one device = one address), add an alias
+# address to the host and put it here (see docs/guides/DEPLOYMENT.md).
+#
+# Port conflicts on the same IP are rejected by the backend before an
+# assignment is accepted.
+
+# Raspberry Pi (Pi OS Lite): the industrial / OT site.
+[[sensors]]
+sensor_id = "pi-ot"
+label = "Raspberry Pi - industrial site"
+os = "pi-os-lite"
+personas = [
+  { persona_id = "industrial-plc" },
+  { persona_id = "s7-plc" },
+  { persona_id = "tank-gauge" },
+  { persona_id = "vfd-drive" },
+  { persona_id = "air-handler" },
+  { persona_id = "building-controller" },
+]
+
+# Device 2 (Linux or Windows): the home / consumer-IoT network.
+[[sensors]]
+sensor_id = "host-home"
+label = "Home network"
+os = "any"
+personas = [
+  { persona_id = "home-router" },
+  { persona_id = "smart-camera" },
+  { persona_id = "dvr-recorder" },
+  { persona_id = "iiot-gateway" },
+]
+
+# Device 3 (Linux or Windows): the office.
+[[sensors]]
+sensor_id = "host-office"
+label = "Office network"
+os = "any"
+personas = [
+  { persona_id = "ops-workstation" },
+  { persona_id = "office-printer" },
+  { persona_id = "voip-phone" },
+  { persona_id = "nas" },
+]
+
+# Device 4 (Linux or Windows): servers and operator HMI.
+[[sensors]]
+sensor_id = "host-server"
+label = "Server / control room"
+os = "any"
+personas = [
+  { persona_id = "edge-server" },
+  { persona_id = "hmi-panel" },
+]

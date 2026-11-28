@@ -1,0 +1,46 @@
+id = "dvr-recorder"
+version = 1
+name = "Hikari HR-16 Network Video Recorder"
+device_type = "dvr"
+vendor = "Hikari"
+model = "HR-16"
+firmware = "3.4.92"
+description = "16-channel DVR: telnet with default credentials (the Mirai target profile), web UI, RTSP."
+
+[fingerprint]
+hostname = "hr16-dvr"
+
+[credentials]
+accept = [["root", "xc3511"], ["admin", "admin"], ["root", "vizxv"]]
+
+[[services]]
+name = "telnet"
+plugin = "telnet"
+port = 2323
+public_port = 23
+
+[services.options]
+banner = "hr16-dvr login"
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8101
+public_port = 8101
+
+[services.options]
+server = "uc-httpd 1.0.0"
+
+[services.options.pages."/"]
+body = "<html><title>NETSurveillance WEB</title><body><h1>$model</h1></body></html>"
+
+[[services]]
+name = "rtsp"
+plugin = "rtsp"
+port = 8555
+public_port = 8554
+
+[services.options]
+streams = ["/user=admin&password=&channel=1&stream=0.sdp", "/ch01/0", "/live/ch00_0"]
+server = "Hikari RTSP"
+realm = "HR-16"

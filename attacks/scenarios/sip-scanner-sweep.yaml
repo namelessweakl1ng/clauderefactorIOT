@@ -1,0 +1,15 @@
+id: sip-scanner-sweep
+name: SIPVicious-style OPTIONS sweep
+description: 'OPTIONS with the friendly-scanner user agent: the svmap fingerprint that dominates SIP honeypot traffic.'
+trial_kind: attack
+target_services:
+- sip
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1595
+steps:
+- service: sip
+  method: OPTIONS
+  user_agent: friendly-scanner
+  extensions:
+  - '100'

@@ -1,0 +1,22 @@
+id: ot-network-campaign
+name: IT-to-OT campaign
+description: 'SNMP sweep of the printer, an RDP probe of the engineering workstation, then S7 identification and a PLC stop: one attacker crossing from IT services
+  into the controller.'
+trial_kind: attack
+target_services:
+- snmp
+- rdp
+- s7
+expected_detection: ICS_WRITE
+severity: critical
+models: T1595 -> T0886 -> T0888 -> T0816
+steps:
+- service: snmp
+  community: public
+- service: rdp
+  usernames:
+  - engineer
+- service: s7
+  operations:
+  - identify
+  - plc_stop

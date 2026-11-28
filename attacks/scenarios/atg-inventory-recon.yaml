@@ -1,0 +1,13 @@
+id: atg-inventory-recon
+name: Tank gauge inventory query
+description: The TLS-350 I20100 in-tank inventory command, the single most common probe seen by GasPot-style ATG honeypots.
+trial_kind: attack
+target_services:
+- atg
+expected_detection: ICS_RECONNAISSANCE
+severity: medium
+models: T0888
+steps:
+- service: atg
+  commands:
+  - I20100

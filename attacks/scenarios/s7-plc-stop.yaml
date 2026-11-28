@@ -1,0 +1,14 @@
+id: s7-plc-stop
+name: S7 PLC stop after identification
+description: 'Identify the CPU, then issue PLC STOP: the loss-of-control step from Stuxnet-era and PLC-Blaster-style tooling.'
+trial_kind: attack
+target_services:
+- s7
+expected_detection: ICS_WRITE
+severity: critical
+models: T0888 -> T0816
+steps:
+- service: s7
+  operations:
+  - identify
+  - plc_stop

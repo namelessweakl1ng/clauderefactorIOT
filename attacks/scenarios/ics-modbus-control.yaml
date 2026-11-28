@@ -1,0 +1,14 @@
+id: ics-modbus-control
+name: Modbus HMI poll (control)
+description: One HMI-style read of two holding registers.
+trial_kind: control
+target_services:
+- modbus
+expected_detection: null
+severity: low
+steps:
+- service: modbus
+  requests:
+  - function: read_holding_registers
+    address: 0
+    quantity: 2

@@ -1,0 +1,29 @@
+id = "hmi-panel"
+version = 1
+name = "Halvern HMI-700 Operator Panel"
+device_type = "hmi"
+vendor = "Halvern Automation"
+model = "HMI-700"
+firmware = "2.2.1"
+description = "Operator touch panel with VNC remote view and a web runtime."
+
+[fingerprint]
+hostname = "hmi700-line3"
+
+[credentials]
+accept = [["operator", "operator"]]
+
+[[services]]
+name = "vnc"
+plugin = "vnc"
+port = 5901
+public_port = 5900
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8103
+public_port = 8103
+
+[services.options.pages."/"]
+body = "<html><title>HMI-700</title><body><h1>$name</h1><p>Line 3 overview</p></body></html>"

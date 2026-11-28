@@ -1,0 +1,82 @@
+name: any-interaction
+id: bbfcb4b5-3073-485c-9067-5a9100e8298b
+title: Any honeypot interaction
+status: stable
+level: informational
+generate: false
+detection:
+  selection:
+    service.name|exists: true
+  condition: selection
+tests:
+  - match: true
+    events: [{service: {name: camera}}]
+---
+name: multi-service-sweep
+id: 0d3f2a9e-6c1b-4e8f-9a57-2b4c6d8e1f03
+title: Activity across multiple decoy services
+status: stable
+version: 1
+level: medium
+confidence: 0.8
+detection_type: MULTI_SERVICE_ACTIVITY
+description: Three or more distinct decoy services touched within ten minutes - horizontal service discovery.
+tags: [attack.discovery, attack.t1046]
+correlation:
+  type: value_count
+  rules: [any-interaction]
+  field: service.name
+  timespan: 10m
+  condition: {gte: 3}
+tests:
+  - match: true
+    events: [{service: {name: camera}}, {service: {name: router}}, {service: {name: mqtt}}]
+  - match: false
+    events: [{service: {name: camera}, repeat: 5}, {service: {name: router}}]
+---
+name: post-authentication-action
+id: 5a9e1c07-3b2d-4f6e-8a19-c0d4e7f2b836
+title: Post-authentication action
+status: stable
+level: informational
+generate: false
+detection:
+  command:
+    process.command_line|exists: true
+  publish:
+    mqtt.operation: publish
+  write:
+    modbus.function_code: [5, 6, 15, 16]
+  coap_change:
+    coap.method: [PUT, POST, DELETE]
+  condition: 1 of command or publish or write or coap_change
+tests:
+  - match: true
+    events: [{process: {command_line: id}}]
+  - match: false
+    events: [{event: {category: session}}]
+---
+name: credential-then-action
+id: 9c2b7e14-5d3a-4f08-b6e1-a7d93c0f2e58
+title: Credential attack followed by device interaction
+status: test
+version: 1
+level: high
+confidence: 0.8
+detection_type: MULTI_STAGE_ATTACK
+description: An authentication attempt followed (in time order) by a command, publish or write within 15 minutes.
+tags: [attack.credential-access, attack.execution]
+correlation:
+  type: temporal_ordered
+  rules: [authentication-attempt, post-authentication-action]
+  timespan: 15m
+tests:
+  - match: true
+    events:
+      - {event: {category: authentication, outcome: success}, authentication: {username: root, password: root}}
+      - {process: {command_line: "uname -a"}}
+  - name: command before any login is not this chain
+    match: false
+    events:
+      - {process: {command_line: "uname -a"}}
+      - {event: {category: authentication, outcome: failure}}

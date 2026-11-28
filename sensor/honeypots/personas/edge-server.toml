@@ -1,0 +1,36 @@
+id = "edge-server"
+version = 1
+name = "Edge Analytics Server"
+device_type = "server"
+vendor = "Generic"
+model = "EDGE-01"
+firmware = "Ubuntu 20.04"
+description = "Edge server with an unauthenticated Redis cache and a metrics web page."
+
+[fingerprint]
+hostname = "edge-01"
+
+[[services]]
+name = "redis"
+plugin = "redis"
+port = 6379
+public_port = 6379
+
+[services.options]
+version = "6.0.16"
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8102
+public_port = 8102
+
+[services.options]
+server = "nginx/1.18.0 (Ubuntu)"
+
+[services.options.pages."/"]
+body = "<html><title>Edge metrics</title><body><h1>edge-01</h1></body></html>"
+
+[services.options.pages."/metrics"]
+content_type = "text/plain"
+body = "node_load1 0.42\nqueue_depth 17\n"

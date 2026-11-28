@@ -1,0 +1,23 @@
+id: router-dns-fingerprint
+name: DNS resolver fingerprinting
+description: CHAOS version.bind, an ANY amplification test, and lookups of likely internal names.
+trial_kind: attack
+target_services:
+- dns
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1595.002
+steps:
+- service: dns
+  queries:
+  - name: version.bind
+    type: TXT
+    class: CH
+  - name: lan
+    type: ANY
+  - name: nexora-gw.lan
+    type: A
+  - name: printer.lan
+    type: A
+  - name: example.com
+    type: A

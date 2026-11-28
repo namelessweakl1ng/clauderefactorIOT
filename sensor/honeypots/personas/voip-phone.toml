@@ -1,0 +1,43 @@
+id = "voip-phone"
+version = 1
+name = "Selva SP-320 IP Phone"
+device_type = "voip_phone"
+vendor = "Selva"
+model = "SP-320"
+firmware = "1.9.44"
+description = "Desk phone: SIP, TFTP provisioning and a configuration web UI."
+
+[fingerprint]
+hostname = "sp320-reception"
+
+[credentials]
+accept = [["admin", "admin"]]
+
+[[services]]
+name = "sip"
+plugin = "sip"
+port = 5060
+public_port = 5060
+
+[services.options]
+user_agent = "Selva SP-320 1.9.44"
+extensions = ["100", "101", "102", "200"]
+
+[[services]]
+name = "tftp"
+plugin = "tftp"
+port = 6969
+public_port = 69
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8099
+public_port = 8099
+
+[services.options]
+realm = "SP-320"
+
+[services.options.pages."/"]
+auth = true
+body = "<html><title>SP-320</title><body><h1>Phone settings</h1></body></html>"

@@ -1,0 +1,46 @@
+{
+  "index_patterns": [
+    "trapsig-personas"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "persona_id": {
+          "type": "keyword"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "content_sha256": {
+          "type": "keyword"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "saved_at": {
+          "type": "date"
+        },
+        "saved_by": {
+          "type": "keyword"
+        },
+        "note": {
+          "type": "text"
+        },
+        "definition": {
+          "type": "object",
+          "enabled": false
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "Immutable persona definition versions",
+    "trapsig_schema_version": "2"
+  }
+}

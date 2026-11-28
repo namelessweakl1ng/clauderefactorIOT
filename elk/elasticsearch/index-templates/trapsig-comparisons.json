@@ -1,0 +1,72 @@
+{
+  "index_patterns": [
+    "trapsig-comparisons"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "report_id": {
+          "type": "keyword"
+        },
+        "created_at": {
+          "type": "date"
+        },
+        "provenance": {
+          "type": "keyword"
+        },
+        "synthetic_warning": {
+          "type": "boolean"
+        },
+        "sessions": {
+          "type": "integer"
+        },
+        "attack_sessions": {
+          "type": "integer"
+        },
+        "control_sessions": {
+          "type": "integer"
+        },
+        "groups": {
+          "type": "integer"
+        },
+        "folds": {
+          "type": "integer"
+        },
+        "seed": {
+          "type": "long"
+        },
+        "ruleset_version": {
+          "type": "keyword"
+        },
+        "bootstrap_policy_version": {
+          "type": "keyword"
+        },
+        "requested_by": {
+          "type": "keyword"
+        },
+        "engines": {
+          "type": "object",
+          "enabled": false
+        },
+        "leakage_check": {
+          "type": "object",
+          "enabled": false
+        },
+        "parameters": {
+          "type": "object",
+          "enabled": false
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "Grouped-CV detection engine comparison reports",
+    "trapsig_schema_version": "2"
+  }
+}

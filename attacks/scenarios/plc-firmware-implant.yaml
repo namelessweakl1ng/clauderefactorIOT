@@ -1,0 +1,19 @@
+id: plc-firmware-implant
+name: PLC firmware implant via FTP
+description: Uses the PLC's default FTP credentials to upload a modified firmware image (refused at the data channel).
+trial_kind: attack
+target_services:
+- ftp
+expected_detection: MALWARE_DOWNLOAD
+severity: critical
+models: T1105, T0839
+steps:
+- service: ftp
+  port: 21
+  username: admin
+  password: admin
+  commands:
+  - TYPE I
+  - CWD /firmware
+  - PASV
+  - STOR hx1200-4.2.2-patched.bin

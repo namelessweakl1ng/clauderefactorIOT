@@ -1,0 +1,22 @@
+id: camera-stream-hunt
+name: RTSP stream-path enumeration
+description: Unauthenticated DESCRIBE across nine vendor stream paths, as camera-hunting tools do before guessing credentials.
+trial_kind: attack
+target_services:
+- rtsp
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1595.003
+steps:
+- service: rtsp
+  method: DESCRIBE
+  paths:
+  - /live/ch0
+  - /live/ch1
+  - /stream1
+  - /h264/ch1/main/av_stream
+  - /cam/realmonitor
+  - /onvif1
+  - /11
+  - /video.mp4
+  - /Streaming/Channels/101

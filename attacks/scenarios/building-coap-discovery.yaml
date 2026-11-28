@@ -1,0 +1,20 @@
+id: building-coap-discovery
+name: CoAP resource discovery
+description: Lists resources via /.well-known/core and reads each sensor, as CoAP scanners do.
+trial_kind: attack
+target_services:
+- coap
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1046, T0888
+steps:
+- service: coap
+  requests:
+  - method: GET
+    path: /.well-known/core
+  - method: GET
+    path: /sensors/temperature
+  - method: GET
+    path: /sensors/co2
+  - method: GET
+    path: /sensors/occupancy

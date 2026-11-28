@@ -1,0 +1,17 @@
+id: snmp-printer-reconfigure
+name: SNMP SET with the private community
+description: 'Read sysDescr, then SET sysContact with ''private'': unauthorised reconfiguration over a default write community.'
+trial_kind: attack
+target_services:
+- snmp
+expected_detection: UNAUTHORIZED_COMMAND
+severity: high
+models: T1078.001 -> T1565
+steps:
+- service: snmp
+  community: private
+  requests:
+  - pdu: get
+  - pdu: set
+    oid: 1.3.6.1.2.1.1.4.0
+    value: pwned

@@ -1,0 +1,15 @@
+id: enip-drive-parameter-write
+name: CIP Set_Attribute on a variable-frequency drive
+description: 'Register a session and send an unconnected CIP Set_Attribute_Single: changing a drive parameter with no authentication.'
+trial_kind: attack
+target_services:
+- enip
+expected_detection: ICS_WRITE
+severity: critical
+models: T0846 -> T0836
+steps:
+- service: enip
+  operations:
+  - list_identity
+  - register_session
+  - set_attribute

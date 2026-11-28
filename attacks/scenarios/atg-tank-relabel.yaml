@@ -1,0 +1,14 @@
+id: atg-tank-relabel
+name: Tank gauge relabel
+description: 'Inventory read, then S602 tank-label change: the defacement attack repeatedly observed against exposed tank gauges.'
+trial_kind: attack
+target_services:
+- atg
+expected_detection: ICS_WRITE
+severity: high
+models: T0888 -> T0836
+steps:
+- service: atg
+  commands:
+  - I20100
+  - S60201WE OWN YOUR TANK

@@ -1,0 +1,157 @@
+{
+  "index_patterns": [
+    "trapsig-network-*"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.lifecycle.name": "trapsig-retention"
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "event": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "dataset": {
+              "type": "keyword"
+            },
+            "kind": {
+              "type": "keyword"
+            },
+            "ingested": {
+              "type": "date"
+            }
+          }
+        },
+        "source": {
+          "properties": {
+            "ip": {
+              "type": "ip"
+            },
+            "port": {
+              "type": "integer"
+            }
+          }
+        },
+        "destination": {
+          "properties": {
+            "ip": {
+              "type": "ip"
+            },
+            "port": {
+              "type": "integer"
+            }
+          }
+        },
+        "network": {
+          "properties": {
+            "transport": {
+              "type": "keyword"
+            },
+            "protocol": {
+              "type": "keyword"
+            },
+            "community_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "zeek": {
+          "properties": {
+            "uid": {
+              "type": "keyword"
+            },
+            "duration": {
+              "type": "float"
+            },
+            "orig_bytes": {
+              "type": "long"
+            },
+            "resp_bytes": {
+              "type": "long"
+            },
+            "conn_state": {
+              "type": "keyword"
+            },
+            "history": {
+              "type": "keyword"
+            },
+            "missed_bytes": {
+              "type": "long"
+            },
+            "orig_pkts": {
+              "type": "long"
+            },
+            "resp_pkts": {
+              "type": "long"
+            },
+            "query": {
+              "type": "keyword"
+            },
+            "qtype_name": {
+              "type": "keyword"
+            },
+            "rcode_name": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "host": {
+              "type": "keyword"
+            },
+            "uri": {
+              "type": "keyword"
+            },
+            "user_agent": {
+              "type": "keyword"
+            },
+            "status_code": {
+              "type": "integer"
+            },
+            "version": {
+              "type": "keyword"
+            },
+            "server_name": {
+              "type": "keyword"
+            },
+            "ja3": {
+              "type": "keyword"
+            },
+            "ja3s": {
+              "type": "keyword"
+            },
+            "established": {
+              "type": "boolean"
+            }
+          }
+        },
+        "trapsig": {
+          "properties": {
+            "sensor_id": {
+              "type": "keyword"
+            },
+            "schema_version": {
+              "type": "keyword"
+            },
+            "internal": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "Zeek network observations (trapsig-network-*)",
+    "trapsig_schema_version": "2"
+  }
+}

@@ -1,0 +1,13 @@
+id: s7-plc-enumeration
+name: S7 PLC module enumeration
+description: ISO-on-TCP connect, S7 setup, then an SZL 0x0011 module-identification read, as done by s7-info / Nmap s7-info.nse and the Conpot S7 template probes.
+trial_kind: attack
+target_services:
+- s7
+expected_detection: ICS_RECONNAISSANCE
+severity: medium
+models: T0846 -> T0888
+steps:
+- service: s7
+  operations:
+  - identify

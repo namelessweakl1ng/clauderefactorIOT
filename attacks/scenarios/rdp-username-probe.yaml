@@ -1,0 +1,15 @@
+id: rdp-username-probe
+name: RDP username cookie probe
+description: X.224 connection requests carrying mstshash cookies for common admin names, as RDP brute-forcers send before NLA.
+trial_kind: attack
+target_services:
+- rdp
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1595 -> T1110
+steps:
+- service: rdp
+  usernames:
+  - administrator
+  - admin
+  - engineer

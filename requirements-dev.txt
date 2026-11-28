@@ -1,0 +1,6 @@
+pytest==8.4.2
+pytest-asyncio==1.1.0
+pytest-cov==5.0.0
+mypy==1.11.2  # type-checks the learned-detection/adaptation modules (see [tool.mypy])
+ruff==0.13.2
+types-PyYAML==6.0.12.20250915  # stubs for the rule loader under mypy

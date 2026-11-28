@@ -1,0 +1,23 @@
+id = "ops-workstation"
+version = 1
+name = "Engineering Workstation ENG-WS-03"
+device_type = "workstation"
+vendor = "Generic"
+model = "ENG-WS-03"
+firmware = "Windows 10 IoT Enterprise"
+description = "Plant engineering workstation exposing remote desktop and VNC: the classic IT-to-OT pivot."
+
+[fingerprint]
+hostname = "ENG-WS-03"
+
+[[services]]
+name = "rdp"
+plugin = "rdp"
+port = 3389
+public_port = 3389
+
+[[services]]
+name = "vnc"
+plugin = "vnc"
+port = 5900
+public_port = 5900

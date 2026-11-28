@@ -1,0 +1,22 @@
+id: nas-anonymous-ftp-exfil
+name: Anonymous FTP data theft attempt
+description: Logs in anonymously, browses the backup share, tries to download an archive and stage a file. The decoy refuses every data transfer.
+trial_kind: attack
+target_services:
+- ftp
+expected_detection: DEFAULT_CREDENTIALS
+severity: high
+models: T1078.001, T1105
+steps:
+- service: ftp
+  port: 2121
+  username: anonymous
+  password: mozilla@example.com
+  commands:
+  - SYST
+  - PWD
+  - CWD /Backups
+  - PASV
+  - LIST
+  - RETR homevault-backup.tar.gz
+  - STOR .sync

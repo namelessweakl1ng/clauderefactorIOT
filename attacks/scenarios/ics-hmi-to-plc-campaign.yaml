@@ -1,0 +1,23 @@
+id: ics-hmi-to-plc-campaign
+name: HMI login followed by PLC write
+description: Logs into the PLC's web HMI with default credentials, then issues a Modbus register write, crossing from IT-style access to process impact.
+trial_kind: attack
+target_services:
+- web
+- modbus
+expected_detection: MULTI_STAGE_ATTACK
+severity: critical
+models: T0812 -> T0855
+steps:
+- service: web
+  port: 8090
+  path: /login
+  auth_mode: form
+  username: admin
+  password: admin
+- service: modbus
+  pause_before: 2
+  requests:
+  - function: write_single_register
+    address: 0
+    value: 9999

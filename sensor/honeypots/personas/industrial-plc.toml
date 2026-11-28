@@ -1,0 +1,73 @@
+# Fictional PLC on a packaging line: Modbus/TCP, a minimal web HMI, and a
+# firmware FTP drop that refuses all data transfers.
+id = "industrial-plc"
+version = 1
+name = "Halvern HX-1200 Line Controller"
+device_type = "industrial_plc"
+vendor = "Halvern Automation"
+model = "HX-1200"
+firmware = "4.2.1"
+description = "Packaging-line PLC exposing Modbus/TCP with holding registers for setpoints and drifting input registers for sensors."
+enabled = true
+
+[fingerprint]
+hostname = "hx1200-line3"
+os = "HalvernRT 4"
+
+[credentials]
+accept = [["admin", "admin"], ["operator", "line3"]]
+
+[logging]
+credentials = "full"
+payload_bytes = 128
+
+[interaction]
+max_messages = 256
+max_seconds = 300
+
+[[services]]
+name = "modbus"
+plugin = "modbus"
+port = 5020
+public_port = 502
+
+[services.options]
+unit_id = 1
+coils = 64
+discrete_inputs = 32
+# Setpoints: conveyor speed (rpm), oven temp (0.1 °C), batch size, mode
+holding_registers = [1450, 1850, 500, 1, 0, 0, 0, 0, 120, 60, 30, 0, 0, 0, 0, 0]
+# Sensors: line temp, pressure, motor current, cycle counter (drift added at runtime)
+input_registers = [212, 1013, 37, 4096, 0, 0, 0, 0]
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8090
+public_port = 8090
+
+[services.options]
+server = "HalvernWeb/2.0"
+realm = "HX-1200"
+login_path = "/login"
+
+[services.options.pages."/"]
+body = "<html><head><title>$name</title></head><body><h1>$model HMI</h1><form method='post' action='/login'><input name='username'><input name='password' type='password'><button>Login</button></form><p>Firmware $firmware</p></body></html>"
+
+[services.options.pages."/status"]
+auth = true
+body = "<html><body><h2>Line 3</h2><p>State: RUN</p><p>Oven: 185.0 C</p></body></html>"
+
+[services.options.pages."/api/device"]
+content_type = "application/json"
+body = "{\"vendor\":\"$vendor\",\"model\":\"$model\",\"firmware\":\"$firmware\",\"hostname\":\"$hostname\"}"
+
+[[services]]
+name = "ftp"
+plugin = "ftp"
+port = 2121
+public_port = 21
+
+[services.options]
+banner = "HX-1200 firmware service ready."
+allow_anonymous = false

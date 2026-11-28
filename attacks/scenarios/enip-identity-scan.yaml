@@ -1,0 +1,13 @@
+id: enip-identity-scan
+name: EtherNet/IP ListIdentity scan
+description: 'One ListIdentity encapsulation command: what enip-info / pyenip / Shodan send to fingerprint a drive or PLC.'
+trial_kind: attack
+target_services:
+- enip
+expected_detection: ICS_RECONNAISSANCE
+severity: medium
+models: T0846
+steps:
+- service: enip
+  operations:
+  - list_identity

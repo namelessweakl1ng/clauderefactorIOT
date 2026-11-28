@@ -1,0 +1,122 @@
+name: trapsig-sensor
+# Every decoy except Cowrie is a declarative persona container. Same hardening for
+# all of them: read-only FS, no capabilities, non-root, bounded pids/mem/cpu.
+x-persona: &persona
+  build: {context: ./honeypots}
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 96
+  mem_limit: 96m
+  cpus: 0.35
+  volumes: [custom-logs:/logs]
+  depends_on: {custom-logs-init: {condition: service_completed_successfully}}
+  healthcheck: {test: [CMD, python, /usr/local/bin/healthcheck.py], interval: 30s, timeout: 5s, retries: 3}
+x-persona-env: &persona-env
+  SENSOR_ID: "${SENSOR_ID}"
+  SENSOR_IP: "${SENSOR_IP}"
+  HONEYPOT_HOSTNAME: "${HONEYPOT_HOSTNAME}"
+  BACKEND_URL: "${BACKEND_URL:-}"
+  SENSOR_API_KEY: "${SENSOR_API_KEY:-}"
+  PERSONA_FROM_BACKEND: "${PERSONA_FROM_BACKEND:-false}"
+  SENSOR_MAX_CONNECTIONS_PER_IP: "${SENSOR_MAX_CONNECTIONS_PER_IP:-24}"
+services:
+  custom-logs-init:
+    build: {context: ./honeypots}
+    user: root
+    command: [chown, -R, "10001:10001", /logs]
+    volumes: [custom-logs:/logs]
+    restart: "no"
+  cowrie:
+    image: cowrie/cowrie:latest
+    restart: unless-stopped
+    ports: ["2222:2222", "2223:2223"]
+    volumes:
+      - cowrie-logs:/cowrie/cowrie-git/var/log/cowrie
+      - ./honeypots/cowrie/cowrie.cfg:/cowrie/cowrie-git/etc/cowrie.cfg:ro
+      - ./honeypots/cowrie/userdb.txt:/cowrie/cowrie-git/etc/userdb.txt:ro
+      - ./honeypots/cowrie/honeyfs/etc/hostname:/cowrie/cowrie-git/honeyfs/etc/hostname:ro
+      - ./honeypots/cowrie/honeyfs/etc/hosts:/cowrie/cowrie-git/honeyfs/etc/hosts:ro
+      - ./honeypots/cowrie/honeyfs/etc/issue:/cowrie/cowrie-git/honeyfs/etc/issue:ro
+      - ./honeypots/cowrie/honeyfs/etc/issue.net:/cowrie/cowrie-git/honeyfs/etc/issue.net:ro
+      - ./honeypots/cowrie/honeyfs/etc/motd:/cowrie/cowrie-git/honeyfs/etc/motd:ro
+      - ./honeypots/cowrie/honeyfs/etc/os-release:/cowrie/cowrie-git/honeyfs/etc/os-release:ro
+      - ./honeypots/cowrie/honeyfs/etc/passwd:/cowrie/cowrie-git/honeyfs/etc/passwd:ro
+      - ./honeypots/cowrie/honeyfs/etc/group:/cowrie/cowrie-git/honeyfs/etc/group:ro
+      - ./honeypots/cowrie/honeyfs/etc/resolv.conf:/cowrie/cowrie-git/honeyfs/etc/resolv.conf:ro
+      - ./honeypots/cowrie/honeyfs/etc/network/interfaces:/cowrie/cowrie-git/honeyfs/etc/network/interfaces:ro
+      - ./honeypots/cowrie/honeyfs/proc/version:/cowrie/cowrie-git/honeyfs/proc/version:ro
+      - ./honeypots/cowrie/honeyfs/proc/cpuinfo:/cowrie/cowrie-git/honeyfs/proc/cpuinfo:ro
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 256m
+    cpus: 0.5
+    healthcheck: {test: [CMD, /cowrie/cowrie-env/bin/python, -c, "import sys; p='08AE'; sys.exit(0 if any(x.split()[1].endswith(':'+p) and x.split()[3]=='0A' for x in open('/proc/net/tcp').readlines()[1:]) else 1)"], interval: 30s, timeout: 5s, retries: 3}
+  # One container per fictional device persona (sensor/honeypots/personas/*.toml).
+  # Containers bind only unprivileged ports; Compose maps privileged public ports.
+  camera:
+    <<: *persona
+    environment: {<<: *persona-env, PERSONA: smart-camera, PORT: "8081"}
+    ports: ["8081:8081", "554:8554"]
+  router:
+    <<: *persona
+    environment: {<<: *persona-env, PERSONA: home-router, PORT: "8080"}
+    ports: ["8080:8080", "49152:49152", "1900:1901/udp", "53:5353/udp"]
+  gateway:
+    <<: *persona
+    environment: {<<: *persona-env, PERSONA: iiot-gateway, PORT: "9000"}
+    ports: ["1883:1883", "9000:9000", "5022:5022", "5685:5685/udp"]
+  plc:
+    <<: *persona
+    environment: {<<: *persona-env, PERSONA: industrial-plc, PORT: "5020"}
+    ports: ["502:5020", "8090:8090", "21:2121"]
+  building:
+    <<: *persona
+    environment: {<<: *persona-env, PERSONA: building-controller, PORT: "5021"}
+    ports: ["5683:5683/udp", "5021:5021", "8091:8091"]
+  nas:
+    <<: *persona
+    environment: {<<: *persona-env, PERSONA: nas, PORT: "2122"}
+    ports: ["2121:2122", "5000:8092"]
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.19.0
+    user: root
+    restart: unless-stopped
+    command: [filebeat, -e, --strict.perms=false]
+    environment: {SENSOR_ID: "${SENSOR_ID}", SENSOR_IP: "${SENSOR_IP}", HONEYPOT_HOSTNAME: "${HONEYPOT_HOSTNAME}", ANALYSIS_HOST: "${ANALYSIS_HOST}", LOGSTASH_PORT: "${LOGSTASH_PORT:-5044}"}
+    volumes: [./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro, custom-logs:/logs/custom:ro, cowrie-logs:/logs/cowrie:ro, zeek-logs:/logs/zeek:ro, filebeat-data:/usr/share/filebeat/data]
+    depends_on: {custom-logs-init: {condition: service_completed_successfully}}
+    healthcheck: {test: [CMD, filebeat, test, config, -c, /usr/share/filebeat/filebeat.yml, --strict.perms=false], interval: 30s, timeout: 10s, retries: 3}
+    mem_limit: 128m
+  # Passive network monitoring (opt-in): docker compose --profile netmon up -d zeek
+  # Host networking + NET_RAW/NET_ADMIN only. The BPF filter excludes management
+  # (SSH 22, Beats 5044, Tailscale 41641, API 8000). ~150-250 MB RSS on a Pi 4.
+  zeek:
+    image: zeek/zeek:7.0.5
+    profiles: [netmon]
+    network_mode: host
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    cap_add: [NET_RAW, NET_ADMIN]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    mem_limit: 320m
+    cpus: 0.5
+    working_dir: /logs/zeek
+    command:
+      - zeek
+      - -C
+      - -i
+      - "${ZEEK_INTERFACE:-eth0}"
+      - -f
+      - "${ZEEK_BPF:-not port 22 and not port 5044 and not port 41641 and not port 8000}"
+      - local
+      - LogAscii::use_json=T
+      - Log::default_rotation_interval=1hr
+      - policy/protocols/conn/community-id-logging
+    volumes: [zeek-logs:/logs/zeek]
+volumes: {custom-logs: {}, cowrie-logs: {}, filebeat-data: {}, zeek-logs: {}}

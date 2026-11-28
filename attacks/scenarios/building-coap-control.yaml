@@ -1,0 +1,13 @@
+id: building-coap-control
+name: CoAP sensor read (control)
+description: One GET of a temperature resource.
+trial_kind: control
+target_services:
+- coap
+expected_detection: null
+severity: low
+steps:
+- service: coap
+  requests:
+  - method: GET
+    path: /sensors/temperature

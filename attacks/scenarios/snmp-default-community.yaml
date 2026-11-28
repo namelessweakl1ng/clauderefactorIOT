@@ -1,0 +1,16 @@
+id: snmp-default-community
+name: SNMP sysDescr with the public community
+description: One GET of sysDescr with community 'public', as onesixtyone, snmp-check and every IoT scanner do first.
+trial_kind: attack
+target_services:
+- snmp
+expected_detection: DEFAULT_CREDENTIALS
+severity: medium
+steps:
+- service: snmp
+  community: public
+  requests:
+  - pdu: get
+    oid: 1.3.6.1.2.1.1.1.0
+  - pdu: get_next
+    oid: 1.3.6.1.2.1.1.4.0

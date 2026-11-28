@@ -1,0 +1,20 @@
+id: camera-rtsp-default-creds
+name: RTSP default-credential stream access
+description: Finds the stream with OPTIONS, then DESCRIBE with the vendor default admin/admin, which the persona accepts.
+trial_kind: attack
+target_services:
+- rtsp
+expected_detection: DEFAULT_CREDENTIALS
+severity: high
+models: T1078.001
+steps:
+- service: rtsp
+  method: OPTIONS
+  paths:
+  - /
+- service: rtsp
+  method: DESCRIBE
+  paths:
+  - /live/ch0
+  username: admin
+  password: admin

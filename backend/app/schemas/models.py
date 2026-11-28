@@ -1,0 +1,92 @@
+import json
+from datetime import datetime
+from typing import Any, Literal
+
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+
+class ExperimentCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    name: str = Field(min_length=1, max_length=120)
+    description: str = ""
+    scenario_id: str
+    attacker_ip: str
+    target_ip: str
+    evaluation_batch_id: str | None = Field(default=None, min_length=1, max_length=120)
+    replicate: int | None = Field(default=None, ge=1)
+    # Research design (all optional; recorded verbatim, never interpreted).
+    objective: str | None = Field(default=None, max_length=2000)
+    hypothesis: str | None = Field(default=None, max_length=2000)
+    # Arm label used by the experiment-lab comparison, e.g. "baseline" or
+    # "adaptive-deception". Constrained to a safe identifier.
+    condition: str | None = Field(default=None, min_length=1, max_length=64, pattern=r"^[A-Za-z0-9][A-Za-z0-9_.\-]*$")
+    tags: list[str] = Field(default_factory=list, max_length=16)
+    configuration: dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def design_is_bounded(self):
+        if any(not tag or len(tag) > 40 for tag in self.tags):
+            raise ValueError("tags must contain 1 to 40 characters")
+        if len(json.dumps(self.configuration, default=str)) > 8192:
+            raise ValueError("configuration must serialize to at most 8 KiB")
+        return self
+
+
+class EventPresenceRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    event_ids: list[str] = Field(min_length=1, max_length=250)
+
+    @model_validator(mode="after")
+    def event_ids_are_bounded_and_nonempty(self):
+        if any(not value or len(value) > 512 for value in self.event_ids):
+            raise ValueError("event IDs must contain 1 to 512 characters")
+        return self
+
+
+class RunnerStep(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    step: int = Field(ge=1)
+    service: str
+    started_at: datetime
+    ended_at: datetime
+    status: Literal["completed", "rejected", "failed"]
+
+    @model_validator(mode="after")
+    def timing_is_ordered(self):
+        if self.ended_at < self.started_at:
+            raise ValueError("step ended_at must not precede started_at")
+        return self
+
+
+class GroundTruthSubmission(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    run_id: str
+    experiment_id: str | None = None
+    scenario_id: str
+    scenario_manifest_sha256: str
+    target: str
+    source: str | None = None
+    expected_detection: str | None
+    start_time: datetime
+    end_time: datetime
+    overall_status: Literal["completed", "partial", "failed"]
+    steps: list[RunnerStep]
+
+    @model_validator(mode="after")
+    def timing_is_ordered(self):
+        if self.end_time < self.start_time:
+            raise ValueError("run end_time must not precede start_time")
+        return self
+
+
+class Experiment(ExperimentCreate):
+    experiment_id: str
+    status: str = "created"
+    created_at: datetime
+    start_time: datetime | None = None
+    end_time: datetime | None = None
+    event_ids: list[str] = Field(default_factory=list)
+    session_ids: list[str] = Field(default_factory=list)
+    detection_ids: list[str] = Field(default_factory=list)
+    observed_detection: bool | None = None
+    result: str | None = None

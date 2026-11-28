@@ -1,0 +1,54 @@
+# Fictional industrial IoT edge gateway bridging field Modbus to MQTT.
+id = "iiot-gateway"
+version = 1
+name = "Velora VMG-300 IIoT Gateway"
+device_type = "iiot_gateway"
+vendor = "Velora"
+model = "VMG-300"
+firmware = "3.0.4"
+description = "Edge gateway: bounded MQTT broker, the VCP/1.0 controller protocol, a downstream Modbus map and read-only CoAP telemetry."
+enabled = true
+
+[fingerprint]
+hostname = "vmg300-edge"
+
+[credentials]
+accept = [["admin", "admin"], ["gateway", "velora"]]
+
+[[services]]
+name = "mqtt"
+plugin = "velora-mqtt"
+port = 1883
+public_port = 1883
+honeypot_id = "mqtt-01"
+
+[[services]]
+name = "iot-service"
+plugin = "velora-vcp"
+port = 9000
+public_port = 9000
+honeypot_id = "iot-service-01"
+
+[[services]]
+name = "modbus"
+plugin = "modbus"
+port = 5022
+public_port = 5022
+
+[services.options]
+unit_id = 7
+holding_registers = [10, 20, 30, 40, 0, 0, 0, 0]
+input_registers = [500, 501, 502, 503]
+
+[[services]]
+name = "coap"
+plugin = "coap"
+port = 5685
+public_port = 5685
+
+[services.options]
+read_only = true
+
+[services.options.resources]
+"/telemetry/line1" = "{\"flow\":12.4,\"psi\":31}"
+"/telemetry/line2" = "{\"flow\":0.0,\"psi\":0}"

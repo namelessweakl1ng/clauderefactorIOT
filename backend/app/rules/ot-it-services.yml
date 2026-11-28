@@ -1,0 +1,600 @@
+name: s7-identification
+id: c87600a0-eb8f-5588-9e62-a37a39077ffc
+title: S7 CPU identification (SZL read)
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: ICS_RECONNAISSANCE
+tags:
+- attack.discovery
+- attack.t0888
+description: 'SZL reads return module, firmware and serial: the first step of S7 reconnaissance tools.'
+detection:
+  selection:
+    s7.identify: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - s7:
+      function: szl_read
+      identify: true
+- match: false
+  events:
+  - s7:
+      function: setup_communication
+      identify: false
+
+---
+name: s7-write-or-stop
+id: d11aa2db-ad40-5e7d-93ed-e405daea89bd
+title: S7 write, download or CPU stop
+status: test
+version: 1
+level: critical
+confidence: 0.9
+detection_type: ICS_WRITE
+tags:
+- attack.impair-process-control
+- attack.t0855
+- attack.t0836
+description: Write variable, block download or PLC stop/control functions change process state.
+detection:
+  selection:
+    s7.write: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - s7:
+      function: plc_stop
+      write: true
+- match: false
+  events:
+  - s7:
+      function: read_var
+      write: false
+
+---
+name: bacnet-device-discovery
+id: 34ad7b06-0a57-5458-a875-c3f6b0011651
+title: BACnet device discovery
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: ICS_RECONNAISSANCE
+tags:
+- attack.discovery
+- attack.t0846
+- attack.t0888
+description: Who-Is broadcasts and device-property reads enumerate building-automation controllers.
+detection:
+  selection:
+    bacnet.identify: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - bacnet:
+      service: who-is
+      identify: true
+- match: false
+  events:
+  - bacnet:
+      service: write-property
+      identify: false
+
+---
+name: bacnet-write-property
+id: ff1a9960-ffa5-5d27-8677-6e1f152d5974
+title: BACnet WriteProperty
+status: test
+version: 1
+level: critical
+confidence: 0.9
+detection_type: ICS_WRITE
+tags:
+- attack.impair-process-control
+- attack.t0836
+description: WriteProperty changes setpoints or outputs of a building controller.
+detection:
+  selection:
+    bacnet.write: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - bacnet:
+      service: write-property
+      write: true
+- match: false
+  events:
+  - bacnet:
+      service: read-property
+      write: false
+
+---
+name: enip-list-identity
+id: c64bb13e-3ef7-5256-b218-aad4aefc839d
+title: EtherNet/IP identity enumeration
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: ICS_RECONNAISSANCE
+tags:
+- attack.discovery
+- attack.t0888
+description: ListIdentity / ListServices reveal vendor, product code and serial of CIP devices.
+detection:
+  selection:
+    enip.identify: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - enip:
+      command: list_identity
+      identify: true
+- match: false
+  events:
+  - enip:
+      command: register_session
+      identify: false
+
+---
+name: enip-cip-write
+id: e92088fd-f13b-5ac3-b6d5-3edb752bf685
+title: CIP write / set attribute
+status: test
+version: 1
+level: critical
+confidence: 0.8
+detection_type: ICS_WRITE
+tags:
+- attack.impair-process-control
+- attack.t0855
+description: CIP Set Attribute or Write Tag services through SendRRData.
+detection:
+  selection:
+    enip.write: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - enip:
+      command: send_rr_data
+      write: true
+- match: false
+  events:
+  - enip:
+      command: send_rr_data
+      write: false
+
+---
+name: atg-inventory-query
+id: 0a6e3567-7a59-54be-85ec-c4e0eff4dbc7
+title: Tank gauge inventory query
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: ICS_RECONNAISSANCE
+tags:
+- attack.collection
+- attack.t0801
+description: I201xx-I205xx reports expose station and tank inventory (a classic Internet-exposed ATG probe).
+detection:
+  selection:
+    atg.identify: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - atg:
+      command: I20100
+      identify: true
+- match: false
+  events:
+  - atg:
+      command: S60201
+      identify: false
+
+---
+name: atg-set-command
+id: d2e96750-2f70-5a7f-9800-a64af6164b21
+title: Tank gauge configuration change
+status: test
+version: 1
+level: high
+confidence: 0.8
+detection_type: ICS_WRITE
+tags:
+- attack.impair-process-control
+- attack.t0836
+description: S602xx functions rename tanks or change thresholds on an automatic tank gauge.
+detection:
+  selection:
+    atg.write: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - atg:
+      command: S60201
+      write: true
+- match: false
+  events:
+  - atg:
+      command: I20100
+      write: false
+
+---
+name: snmp-default-community
+id: 889da462-afb0-5c58-bc15-d6cca89a5e85
+title: SNMP default community string
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: DEFAULT_CREDENTIALS
+tags:
+- attack.initial-access
+- attack.t1078.001
+description: The public/private community strings are the default credentials of SNMP agents.
+detection:
+  selection:
+    snmp.community:
+    - public
+    - private
+    - community
+    - admin
+  condition: selection
+tests:
+- match: true
+  events:
+  - snmp:
+      community: public
+      pdu: get
+- match: false
+  events:
+  - snmp:
+      community: c0mpl3x!
+      pdu: get
+
+---
+name: snmp-request
+id: 82dd0061-1522-52db-a81e-fc27d0a3ef0c
+title: SNMP request
+status: test
+version: 1
+level: informational
+generate: false
+description: Building block.
+detection:
+  selection:
+    snmp.pdu|exists: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - snmp:
+      pdu: get-next
+
+---
+name: snmp-community-guessing
+id: 5c8408ea-ee63-543b-a9d2-d56a9931a58e
+title: SNMP community-string guessing
+status: test
+version: 1
+level: high
+confidence: 0.8
+detection_type: BRUTE_FORCE
+tags:
+- attack.credential-access
+- attack.t1110.001
+description: Four or more distinct community strings tried within five minutes (onesixtyone-style).
+correlation:
+  type: value_count
+  rules:
+  - snmp-request
+  field: snmp.community
+  timespan: 5m
+  condition:
+    gte: 4
+tests:
+- match: true
+  events:
+  - snmp:
+      pdu: get
+      community: a
+  - snmp:
+      pdu: get
+      community: b
+  - snmp:
+      pdu: get
+      community: c
+  - snmp:
+      pdu: get
+      community: d
+- match: false
+  events:
+  - snmp:
+      pdu: get
+      community: public
+    repeat: 6
+
+---
+name: snmp-set-request
+id: a4a2ef6f-2f0f-52de-a5b2-31a9480af2b6
+title: SNMP SET request
+status: test
+version: 1
+level: high
+confidence: 0.8
+detection_type: UNAUTHORIZED_COMMAND
+tags:
+- attack.impair-process-control
+- attack.t0855
+description: SET attempts reconfiguration through a (guessed) write community.
+detection:
+  selection:
+    snmp.write: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - snmp:
+      pdu: set
+      write: true
+- match: false
+  events:
+  - snmp:
+      pdu: get
+      write: false
+
+---
+name: redis-exploitation
+id: 383c554d-8984-57a9-83da-3253fd73842a
+title: Redis exploitation primitive
+status: test
+version: 1
+level: high
+confidence: 0.9
+detection_type: EXPLOIT_ATTEMPT
+tags:
+- attack.initial-access
+- attack.t1190
+- attack.execution
+description: 'SLAVEOF/REPLICAOF rogue master, MODULE LOAD, EVAL or CONFIG SET dir/dbfilename: the standard unauthenticated-Redis takeover chain.'
+detection:
+  selection:
+    redis.exploit: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - redis:
+      command: SLAVEOF
+      exploit: true
+- match: false
+  events:
+  - redis:
+      command: INFO
+      exploit: false
+
+---
+name: redis-unauthenticated-write
+id: e2f7a92c-2ae6-5993-a375-f878ff6c230e
+title: Unauthenticated Redis write
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: UNAUTHORIZED_COMMAND
+tags:
+- attack.impact
+description: Data-changing commands (SET, FLUSHALL, CONFIG) against the open instance.
+detection:
+  selection:
+    redis.write: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - redis:
+      command: FLUSHALL
+      write: true
+- match: false
+  events:
+  - redis:
+      command: GET
+      write: false
+
+---
+name: sip-request
+id: a1fa93a3-50a4-5843-82fe-93a1be5d5f2c
+title: SIP request
+status: test
+version: 1
+level: informational
+generate: false
+description: Building block.
+detection:
+  selection:
+    sip.method|exists: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - sip:
+      method: OPTIONS
+
+---
+name: sip-scanner
+id: 0b0f4b4a-d9c0-5509-976e-ccd25cf4e125
+title: SIP scanner or extension enumeration
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: RECONNAISSANCE
+tags:
+- attack.reconnaissance
+- attack.t1595
+description: Known scanner user agents (SIPVicious friendly-scanner, sipsak, sundayddr) or OPTIONS probing.
+detection:
+  agent:
+    sip.user_agent|re: (friendly-scanner|sipvicious|sipcli|sundayddr|sipsak|pplsip|iWar)
+  options:
+    sip.method: OPTIONS
+  condition: agent or options
+tests:
+- match: true
+  events:
+  - sip:
+      method: REGISTER
+      user_agent: friendly-scanner
+- match: true
+  events:
+  - sip:
+      method: OPTIONS
+      user_agent: Zoiper
+- match: false
+  events:
+  - sip:
+      method: REGISTER
+      user_agent: Zoiper
+
+---
+name: sip-extension-enumeration
+id: 32afd86e-f2c4-5f8c-9f2c-1b3b74b562ce
+title: SIP extension enumeration
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: RECONNAISSANCE
+tags:
+- attack.reconnaissance
+- attack.t1595.003
+description: Five or more distinct target extensions within five minutes (svwar-style).
+correlation:
+  type: value_count
+  rules:
+  - sip-request
+  field: sip.to_user
+  timespan: 5m
+  condition:
+    gte: 5
+tests:
+- match: true
+  events:
+  - sip:
+      method: REGISTER
+      to_user: '100'
+  - sip:
+      method: REGISTER
+      to_user: '101'
+  - sip:
+      method: REGISTER
+      to_user: '102'
+  - sip:
+      method: REGISTER
+      to_user: '103'
+  - sip:
+      method: REGISTER
+      to_user: '104'
+- match: false
+  events:
+  - sip:
+      method: REGISTER
+      to_user: '100'
+    repeat: 5
+
+---
+name: tftp-write-request
+id: 0b4d109d-b3c3-5b38-bf2e-aec1b0f9c808
+title: TFTP upload attempt
+status: test
+version: 1
+level: high
+confidence: 0.8
+detection_type: MALWARE_DOWNLOAD
+tags:
+- attack.command-and-control
+- attack.t1105
+description: WRQ tries to stage a file on the device (refused by the decoy).
+detection:
+  selection:
+    tftp.opcode: WRQ
+  condition: selection
+tests:
+- match: true
+  events:
+  - tftp:
+      opcode: WRQ
+      filename: x
+- match: false
+  events:
+  - tftp:
+      opcode: RRQ
+      filename: x
+
+---
+name: tftp-config-fetch
+id: 8addfb1b-a021-5b45-b32a-f46039c8ed7c
+title: TFTP firmware/config fetch
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: RECONNAISSANCE
+tags:
+- attack.collection
+- attack.t1592
+description: RRQ for configuration or firmware files (VoIP provisioning, router configs).
+detection:
+  selection:
+    tftp.opcode: RRQ
+  condition: selection
+tests:
+- match: true
+  events:
+  - tftp:
+      opcode: RRQ
+      filename: SEP001122334455.cnf.xml
+- match: false
+  events:
+  - tftp:
+      opcode: WRQ
+      filename: x
+
+---
+name: rdp-cookie-username
+id: 070ef795-eae4-570e-b61e-85961f065390
+title: RDP connection with username cookie
+status: test
+version: 1
+level: low
+confidence: 0.7
+detection_type: RECONNAISSANCE
+tags:
+- attack.initial-access
+- attack.t1133
+description: mstshash cookies reveal the account an RDP scanner or brute-forcer is targeting.
+detection:
+  selection:
+    rdp.cookie_user|exists: true
+  condition: selection
+tests:
+- match: true
+  events:
+  - rdp:
+      cookie_user: administrator
+- match: false
+  events:
+  - rdp:
+      requested_protocols: 3

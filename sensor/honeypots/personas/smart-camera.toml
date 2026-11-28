@@ -1,0 +1,34 @@
+# The existing AsterView camera web UI composed with an RTSP control plane.
+id = "smart-camera"
+version = 1
+name = "AsterView CV-210 Network Camera"
+device_type = "ip_camera"
+vendor = "AsterView"
+model = "CV-210"
+firmware = "2.4.7"
+description = "Legacy AsterView web persona (unchanged behaviour) plus RTSP stream negotiation that never sends media."
+enabled = true
+
+[fingerprint]
+hostname = "cv210-lobby"
+
+[credentials]
+accept = [["admin", "admin"]]
+
+[[services]]
+name = "camera"
+plugin = "asterview-camera-http"
+port = 8081
+public_port = 8081
+honeypot_id = "camera-01"
+
+[[services]]
+name = "rtsp"
+plugin = "rtsp"
+port = 8554
+public_port = 554
+
+[services.options]
+streams = ["/live/ch0", "/live/ch1", "/cam/realmonitor"]
+server = "AsterView RTSP/1.0"
+realm = "CV-210"

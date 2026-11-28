@@ -1,0 +1,15 @@
+id: mqtt-auth-probe
+name: MQTT authentication probe
+description: Bounded MQTT CONNECT probes
+trial_kind: attack
+target_services:
+- mqtt
+expected_detection: MQTT_PROBING
+severity: medium
+steps:
+- service: mqtt
+  operation: connect
+  client_id: mqtt-client-1
+- service: mqtt
+  operation: connect
+  client_id: mqtt-client-2

@@ -1,0 +1,76 @@
+name: http-request
+id: ca3abd26-4c7b-4886-9cfc-ef31a9b2955f
+title: HTTP request with a path
+status: stable
+level: informational
+generate: false
+detection:
+  selection:
+    url.path|exists: true
+  condition: selection
+tests:
+  - match: true
+    events: [{url: {path: /}}]
+  - match: false
+    events: [{event: {category: network}}]
+---
+name: web-path-enumeration
+id: e3dc773a-cd45-4ea1-a883-7801ee046994
+title: Web path enumeration
+status: stable
+version: 1
+level: medium
+confidence: 0.8
+detection_type: WEB_ENUMERATION
+description: Five or more distinct URL paths requested from one source within five minutes.
+tags: [attack.reconnaissance, attack.t1595.003]
+falsepositives: [Browsing an admin UI by hand can touch several pages]
+correlation:
+  type: value_count
+  rules: [http-request]
+  field: url.path
+  timespan: 5m
+  condition: {gte: 5}
+tests:
+  - match: true
+    events:
+      - {url: {path: /}}
+      - {url: {path: /admin}}
+      - {url: {path: /config}}
+      - {url: {path: /status}}
+      - {url: {path: /setup.cgi}}
+  - name: the same page refreshed is not enumeration
+    match: false
+    events: [{url: {path: /login}, repeat: 10}]
+---
+name: iot-exploit-path-probe
+id: 405c5e4f-6ba5-454c-a346-9c1a36d3c251
+title: Request for a known IoT exploit or secrets path
+status: test
+version: 1
+level: high
+confidence: 0.85
+detection_type: EXPLOIT_ATTEMPT
+description: >
+  Paths probed by IoT botnets and exploit kits (HNAP, GPON, Boa forms, CGI shells,
+  exposed .env/.git). The decoy implements none of them; a request is intent evidence.
+tags: [attack.initial-access, attack.t1190, attack.t1595.002]
+references:
+  - https://attack.mitre.org/techniques/T1190/
+detection:
+  exploit_paths:
+    url.path|contains: [/HNAP1, /GponForm, /boaform, /cgi-bin/, /setup.cgi, /shell, /tmUnblock.cgi, /goform/, /picsdesc.xml, /ctrlt/DeviceUpgrade]
+  secret_paths:
+    url.path|endswith: [/.env, /.git/config, /wp-config.php, /config.bak]
+  traversal:
+    url.path|contains: ["../", "%2e%2e"]
+  condition: exploit_paths or secret_paths or traversal
+tests:
+  - match: true
+    events: [{url: {path: /HNAP1/}}]
+  - match: true
+    events: [{url: {path: /cgi-bin/luci/;stok=/locale}}]
+  - match: true
+    events: [{url: {path: /app/.env}}]
+  - match: false
+    events: [{url: {path: /status}}]

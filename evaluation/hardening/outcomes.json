@@ -1,0 +1,4119 @@
+{
+ "generated_at": "2026-11-26T19:09:49.456719+00:00",
+ "method": "each runnable attack scenario x each hardening action, real persona runtime on loopback, effects enforced by sensor code",
+ "repeats": 2,
+ "actions": {
+  "observe": [],
+  "tarpit": [
+   "tarpit"
+  ],
+  "deny_auth": [
+   "deny_auth"
+  ],
+  "read_only": [
+   "read_only"
+  ],
+  "quarantine": [
+   "tarpit",
+   "deny_auth",
+   "read_only",
+   "drop_udp"
+  ]
+ },
+ "scenarios": [
+  {
+   "scenario_id": "atg-inventory-recon",
+   "expected_detection": "ICS_RECONNAISSANCE",
+   "detections": [
+    "ICS_RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "ot",
+   "services": [
+    "atg"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.024
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.02
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.305
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.435
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.027
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.025
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.011
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.034
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.228
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.394
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "atg-tank-relabel",
+   "expected_detection": "ICS_WRITE",
+   "detections": [
+    "ICS_RECONNAISSANCE",
+    "ICS_WRITE"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "atg"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.033
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.023
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.307
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.39
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.038
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.012
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.012
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.014
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.306
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.368
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "bacnet-device-discovery",
+   "expected_detection": "ICS_RECONNAISSANCE",
+   "detections": [
+    "ICS_RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "ot",
+   "services": [
+    "bacnet"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.013
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.014
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.019
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.015
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.013
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.014
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.016
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.013
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 6.016
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 6.036
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "bacnet-setpoint-override",
+   "expected_detection": "ICS_WRITE",
+   "detections": [
+    "ICS_RECONNAISSANCE",
+    "ICS_WRITE"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "bacnet"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.013
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.012
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.013
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.011
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.02
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.013
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.012
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.012
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.015
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.021
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "building-actuator-tamper",
+   "expected_detection": "UNAUTHORIZED_COMMAND",
+   "detections": [
+    "ICS_WRITE",
+    "RECONNAISSANCE",
+    "UNAUTHORIZED_COMMAND"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "coap"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.022
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.034
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.025
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.016
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.019
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.017
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.019
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.011
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 8.026
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 8.026
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "building-coap-discovery",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "ot",
+   "services": [
+    "coap"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.02
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.029
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.018
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.018
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.023
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.031
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.034
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.039
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 8.048
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 8.032
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "camera-rtsp-default-creds",
+   "expected_detection": "DEFAULT_CREDENTIALS",
+   "detections": [
+    "DEFAULT_CREDENTIALS"
+   ],
+   "stage": "credential",
+   "surface": "it",
+   "services": [
+    "rtsp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.014
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.033
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.801
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.774
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.04
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.046
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.049
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.055
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.618
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.85
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "camera-stream-hunt",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "it",
+   "services": [
+    "rtsp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.048
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.029
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.323
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.328
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.037
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.025
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.04
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.021
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.308
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.272
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "dvr-telnet-default-login",
+   "expected_detection": "DEFAULT_CREDENTIALS",
+   "detections": [
+    "COMMAND_INTERACTION",
+    "DEFAULT_CREDENTIALS",
+    "MULTI_STAGE_ATTACK"
+   ],
+   "stage": "intrusion",
+   "surface": "it",
+   "services": [
+    "telnet"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.022
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.015
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.299
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.349
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.025
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.014
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.026
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.027
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.492
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.166
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "dvr-telnet-mirai-dropper",
+   "expected_detection": "MALWARE_DOWNLOAD",
+   "detections": [
+    "COMMAND_INTERACTION",
+    "DEFAULT_CREDENTIALS",
+    "MALWARE_DOWNLOAD",
+    "MULTI_STAGE_ATTACK"
+   ],
+   "stage": "intrusion",
+   "surface": "it",
+   "services": [
+    "telnet"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 9,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.034
+     },
+     {
+      "harm_events": 9,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 9,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.216
+     },
+     {
+      "harm_events": 9,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.329
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.032
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.016
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 9,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.033
+     },
+     {
+      "harm_events": 9,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.038
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.279
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.451
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "enip-drive-parameter-write",
+   "expected_detection": "ICS_WRITE",
+   "detections": [
+    "ICS_RECONNAISSANCE",
+    "ICS_WRITE"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "enip"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.039
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.356
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.445
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.018
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.024
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.016
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.517
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.375
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "enip-identity-scan",
+   "expected_detection": "ICS_RECONNAISSANCE",
+   "detections": [
+    "ICS_RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "ot",
+   "services": [
+    "enip"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.017
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.285
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.189
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.019
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.016
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.016
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.022
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.206
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.253
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "ftp-low-and-slow",
+   "expected_detection": "BRUTE_FORCE",
+   "detections": [
+    "BRUTE_FORCE",
+    "DEFAULT_CREDENTIALS"
+   ],
+   "stage": "credential",
+   "surface": "it",
+   "services": [
+    "ftp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.048
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.069
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.039
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 1.746
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.043
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.061
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.094
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.093
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.039
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 24,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.266
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "gateway-mqtt-command-injection",
+   "expected_detection": "UNAUTHORIZED_COMMAND",
+   "detections": [
+    "MQTT_PROBING",
+    "UNAUTHORIZED_COMMAND"
+   ],
+   "stage": "ics_impact",
+   "surface": "it",
+   "services": [
+    "mqtt"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.031
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.028
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.784
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.711
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.814
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.862
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.791
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.713
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.797
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 0.789
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "http-enumeration",
+   "expected_detection": "WEB_ENUMERATION",
+   "detections": [
+    "WEB_ENUMERATION"
+   ],
+   "stage": "recon",
+   "surface": "it",
+   "services": [
+    "camera"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.024
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.025
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.79
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.554
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.683
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.893
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.877
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.718
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.779
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.64
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "ics-hmi-to-plc-campaign",
+   "expected_detection": "MULTI_STAGE_ATTACK",
+   "detections": [
+    "DEFAULT_CREDENTIALS",
+    "ICS_WRITE",
+    "MULTI_STAGE_ATTACK"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "modbus",
+    "web"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 2,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.073
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.043
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 2,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 1.122
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.9
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.069
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.05
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.049
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.05
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.685
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.98
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "ics-modbus-recon",
+   "expected_detection": "ICS_RECONNAISSANCE",
+   "detections": [
+    "ICS_RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "ot",
+   "services": [
+    "modbus"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.04
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.062
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.943
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.606
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.068
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.058
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.043
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.033
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.724
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 18,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.676
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "ics-setpoint-tamper",
+   "expected_detection": "ICS_WRITE",
+   "detections": [
+    "ICS_WRITE"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "modbus"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 3,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.034
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.034
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 3,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.497
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.424
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 3,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.029
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.039
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.035
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.188
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.499
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "iot-exploit-sweep",
+   "expected_detection": "EXPLOIT_ATTEMPT",
+   "detections": [
+    "EXPLOIT_ATTEMPT",
+    "WEB_ENUMERATION"
+   ],
+   "stage": "intrusion",
+   "surface": "it",
+   "services": [
+    "router"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.043
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.039
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 3.267
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 3.676
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 3.815
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.249
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.213
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 3.44
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 3.827
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 12,
+      "events": 12,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.464
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "iot-fleet-sweep",
+   "expected_detection": "MULTI_SERVICE_ACTIVITY",
+   "detections": [
+    "DEFAULT_CREDENTIALS",
+    "MULTI_SERVICE_ACTIVITY",
+    "MULTI_STAGE_ATTACK",
+    "RECONNAISSANCE"
+   ],
+   "stage": "intrusion",
+   "surface": "ot",
+   "services": [
+    "coap",
+    "dns",
+    "ftp",
+    "modbus",
+    "rtsp",
+    "web"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 5,
+      "steps_failed": 0,
+      "seconds": 2.074
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 5,
+      "steps_failed": 0,
+      "seconds": 2.099
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 5,
+      "steps_failed": 0,
+      "seconds": 3.189
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 5,
+      "steps_failed": 0,
+      "seconds": 3.605
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 4,
+      "steps_failed": 0,
+      "seconds": 2.117
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 4,
+      "steps_failed": 0,
+      "seconds": 2.11
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 5,
+      "steps_failed": 0,
+      "seconds": 2.091
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 5,
+      "steps_failed": 0,
+      "seconds": 2.1
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 5.216
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 9,
+      "events": 9,
+      "steps_completed": 3,
+      "steps_failed": 0,
+      "seconds": 5.419
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "nas-anonymous-ftp-exfil",
+   "expected_detection": "DEFAULT_CREDENTIALS",
+   "detections": [
+    "DEFAULT_CREDENTIALS",
+    "MALWARE_DOWNLOAD"
+   ],
+   "stage": "intrusion",
+   "surface": "it",
+   "services": [
+    "ftp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.032
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.391
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.28
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.028
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.034
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.024
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 11,
+      "events": 11,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.389
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.21
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "ot-network-campaign",
+   "expected_detection": "ICS_WRITE",
+   "detections": [
+    "DEFAULT_CREDENTIALS",
+    "ICS_RECONNAISSANCE",
+    "ICS_WRITE",
+    "MULTI_SERVICE_ACTIVITY",
+    "RECONNAISSANCE"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "rdp",
+    "s7",
+    "snmp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 2,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.04
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.053
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 2,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.443
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.94
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 1,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.071
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.061
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.038
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.051
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.865
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 6,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.48
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "plc-firmware-implant",
+   "expected_detection": "MALWARE_DOWNLOAD",
+   "detections": [
+    "DEFAULT_CREDENTIALS",
+    "MALWARE_DOWNLOAD"
+   ],
+   "stage": "intrusion",
+   "surface": "it",
+   "services": [
+    "ftp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.031
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.026
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.255
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.199
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.044
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.033
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.034
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.032
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.478
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.485
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "rdp-username-probe",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "DEFAULT_CREDENTIALS",
+    "RECONNAISSANCE"
+   ],
+   "stage": "credential",
+   "surface": "it",
+   "services": [
+    "rdp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.042
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.033
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.944
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.0
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.031
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.034
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.037
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.039
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.147
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.883
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "redis-rogue-master",
+   "expected_detection": "EXPLOIT_ATTEMPT",
+   "detections": [
+    "EXPLOIT_ATTEMPT"
+   ],
+   "stage": "intrusion",
+   "surface": "it",
+   "services": [
+    "redis"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 3,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.021
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.019
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 3,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.445
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.24
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 3,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.02
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.032
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.036
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.036
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.506
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.431
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "redis-ssh-key-implant",
+   "expected_detection": "EXPLOIT_ATTEMPT",
+   "detections": [
+    "EXPLOIT_ATTEMPT",
+    "UNAUTHORIZED_COMMAND"
+   ],
+   "stage": "ics_impact",
+   "surface": "it",
+   "services": [
+    "redis"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.024
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.05
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.193
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.377
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.035
+     },
+     {
+      "harm_events": 3,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.037
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.034
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.028
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.302
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 7,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.367
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "router-dns-fingerprint",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "it",
+   "services": [
+    "dns"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.023
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.023
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.023
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.03
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.024
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.012
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.024
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 2.025
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 10.024
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 5,
+      "events": 5,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 10.057
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "router-upnp-discovery",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "it",
+   "services": [
+    "ssdp",
+    "web"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.05
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.027
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 2.322
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.503
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.022
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.033
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 0.025
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 2,
+      "steps_failed": 0,
+      "seconds": 2.037
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 6.202
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 6.346
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "s7-logic-download",
+   "expected_detection": "ICS_WRITE",
+   "detections": [
+    "ICS_WRITE"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "s7"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.041
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.05
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.401
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.179
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.032
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.02
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.041
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.036
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.26
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.298
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "s7-plc-enumeration",
+   "expected_detection": "ICS_RECONNAISSANCE",
+   "detections": [
+    "ICS_RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "ot",
+   "services": [
+    "s7"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.034
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.036
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.46
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.358
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.024
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.049
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.033
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.036
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.172
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 3,
+      "events": 3,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.459
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "s7-plc-stop",
+   "expected_detection": "ICS_WRITE",
+   "detections": [
+    "ICS_RECONNAISSANCE",
+    "ICS_WRITE"
+   ],
+   "stage": "ics_impact",
+   "surface": "ot",
+   "services": [
+    "s7"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.026
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.045
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.454
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.491
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.028
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.021
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.023
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.051
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.491
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 4,
+      "events": 4,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.521
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "sip-extension-enumeration",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "it",
+   "services": [
+    "sip"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.03
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.036
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.034
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.033
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.041
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.016
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.034
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.03
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 20.083
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 10,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 20.079
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "sip-scanner-sweep",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "it",
+   "services": [
+    "sip"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.017
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.018
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.017
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.016
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.017
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.016
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.016
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.017
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.025
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.02
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "snmp-community-guessing",
+   "expected_detection": "BRUTE_FORCE",
+   "detections": [
+    "BRUTE_FORCE",
+    "DEFAULT_CREDENTIALS"
+   ],
+   "stage": "credential",
+   "surface": "it",
+   "services": [
+    "snmp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 14.079
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 14.048
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 14.031
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 14.056
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 16.073
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 16.067
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 14.072
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 14.054
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 16.065
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 8,
+      "events": 8,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 16.073
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "snmp-default-community",
+   "expected_detection": "DEFAULT_CREDENTIALS",
+   "detections": [
+    "DEFAULT_CREDENTIALS"
+   ],
+   "stage": "credential",
+   "surface": "it",
+   "services": [
+    "snmp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.021
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.02
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.02
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.02
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.019
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.016
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.019
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.019
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.051
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.032
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "snmp-printer-reconfigure",
+   "expected_detection": "UNAUTHORIZED_COMMAND",
+   "detections": [
+    "DEFAULT_CREDENTIALS",
+    "UNAUTHORIZED_COMMAND"
+   ],
+   "stage": "ics_impact",
+   "surface": "it",
+   "services": [
+    "snmp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.018
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.019
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.018
+     },
+     {
+      "harm_events": 2,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.02
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.032
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.025
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.018
+     },
+     {
+      "harm_events": 1,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 1,
+      "steps_failed": 0,
+      "seconds": 0.018
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.024
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.032
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "tftp-implant-upload",
+   "expected_detection": "MALWARE_DOWNLOAD",
+   "detections": [
+    "MALWARE_DOWNLOAD"
+   ],
+   "stage": "intrusion",
+   "surface": "it",
+   "services": [
+    "tftp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.017
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.019
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.016
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.017
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.016
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.017
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.017
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.017
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.028
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 1,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.019
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "tftp-phone-config-theft",
+   "expected_detection": "RECONNAISSANCE",
+   "detections": [
+    "RECONNAISSANCE"
+   ],
+   "stage": "recon",
+   "surface": "it",
+   "services": [
+    "tftp"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.019
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.022
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.017
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.019
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.022
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.018
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.019
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.02
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.033
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 2,
+      "events": 2,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 4.032
+     }
+    ]
+   }
+  },
+  {
+   "scenario_id": "vnc-password-guessing",
+   "expected_detection": "BRUTE_FORCE",
+   "detections": [
+    "BRUTE_FORCE"
+   ],
+   "stage": "credential",
+   "surface": "it",
+   "services": [
+    "vnc"
+   ],
+   "actions": {
+    "observe": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.063
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.082
+     }
+    ],
+    "tarpit": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.917
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.014
+     }
+    ],
+    "deny_auth": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.051
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.087
+     }
+    ],
+    "read_only": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.055
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 0.06
+     }
+    ],
+    "quarantine": [
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 2.172
+     },
+     {
+      "harm_events": 0,
+      "behaviours": 1,
+      "events": 6,
+      "steps_completed": 0,
+      "steps_failed": 0,
+      "seconds": 1.593
+     }
+    ]
+   }
+  }
+ ]
+}

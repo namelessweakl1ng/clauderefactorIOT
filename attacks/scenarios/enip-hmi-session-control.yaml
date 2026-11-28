@@ -1,0 +1,13 @@
+id: enip-hmi-session-control
+name: EtherNet/IP HMI session (control)
+description: Register a session and read attributes, as a supervisory HMI does.
+trial_kind: control
+target_services:
+- enip
+expected_detection: null
+severity: low
+steps:
+- service: enip
+  operations:
+  - register_session
+  - get_attributes

@@ -1,0 +1,45 @@
+{
+  "properties": {
+    "evidence_end_time": {
+      "type": "date"
+    },
+    "detected_at": {
+      "type": "date"
+    },
+    "confidence_calibrated": {
+      "type": "boolean"
+    },
+    "fired_by": {
+      "type": "keyword"
+    },
+    "services": {
+      "type": "keyword"
+    },
+    "attack": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "keyword"
+        },
+        "tactics": {
+          "type": "keyword"
+        },
+        "domain": {
+          "type": "keyword"
+        },
+        "known": {
+          "type": "boolean"
+        },
+        "mapping": {
+          "type": "keyword"
+        }
+      }
+    },
+    "signals": {
+      "type": "object",
+      "enabled": false
+    }
+  }
+}

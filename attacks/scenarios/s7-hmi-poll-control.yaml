@@ -1,0 +1,12 @@
+id: s7-hmi-poll-control
+name: S7 HMI variable read (control)
+description: Connect, set up communication and read one variable, as an HMI does every cycle.
+trial_kind: control
+target_services:
+- s7
+expected_detection: null
+severity: low
+steps:
+- service: s7
+  operations:
+  - read_var

@@ -1,0 +1,49 @@
+# Fictional consumer NAS: FTP with anonymous login enabled (a classic
+# misconfiguration), a web console, and UPnP discovery.
+id = "nas"
+version = 1
+name = "Strata HomeVault 2"
+device_type = "nas"
+vendor = "Strata Storage"
+model = "HV-2"
+firmware = "5.1.7"
+description = "Two-bay home NAS with anonymous FTP and a web console."
+enabled = true
+
+[fingerprint]
+hostname = "homevault"
+os = "StrataOS 5 (Linux 4.14)"
+
+[credentials]
+accept = [["admin", "admin"], ["admin", "password"]]
+
+[[services]]
+name = "ftp"
+plugin = "ftp"
+port = 2122
+public_port = 2121
+
+[services.options]
+banner = "HomeVault FTP ready"
+allow_anonymous = true
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8092
+public_port = 5000
+
+[services.options]
+server = "nginx"
+realm = "HomeVault"
+
+[services.options.pages."/"]
+body = "<html><title>HomeVault</title><body><h1>$name</h1><form method='post' action='/login'><input name='username'><input name='password' type='password'></form></body></html>"
+
+[services.options.pages."/shares"]
+auth = true
+body = "<html><body><ul><li>Photos</li><li>Backups</li></ul></body></html>"
+
+[services.options.pages."/rootDesc.xml"]
+content_type = "text/xml"
+body = "<?xml version=\"1.0\"?><root xmlns=\"urn:schemas-upnp-org:device-1-0\"><device><deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType><friendlyName>$name</friendlyName><manufacturer>$vendor</manufacturer><modelName>$model</modelName></device></root>"

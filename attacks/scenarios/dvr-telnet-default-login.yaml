@@ -1,0 +1,16 @@
+id: dvr-telnet-default-login
+name: DVR telnet factory-default login
+description: One login with the vendor's documented default credentials, then device identification commands.
+trial_kind: attack
+target_services:
+- iot-telnet
+expected_detection: DEFAULT_CREDENTIALS
+severity: high
+steps:
+- service: iot-telnet
+  credentials:
+  - - admin
+    - admin
+  commands:
+  - uname -a
+  - cat /proc/version

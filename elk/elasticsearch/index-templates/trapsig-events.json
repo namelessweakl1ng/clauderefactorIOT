@@ -1,0 +1,643 @@
+{
+  "index_patterns": [
+    "trapsig-events-*"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.lifecycle.name": "trapsig-retention"
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "event": {
+          "properties": {
+            "ingested": {
+              "type": "date"
+            },
+            "id": {
+              "type": "keyword"
+            },
+            "category": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword"
+            },
+            "action": {
+              "type": "keyword"
+            },
+            "outcome": {
+              "type": "keyword"
+            }
+          }
+        },
+        "source": {
+          "properties": {
+            "ip": {
+              "type": "ip"
+            },
+            "port": {
+              "type": "integer"
+            }
+          }
+        },
+        "destination": {
+          "properties": {
+            "ip": {
+              "type": "ip"
+            },
+            "port": {
+              "type": "integer"
+            }
+          }
+        },
+        "network": {
+          "properties": {
+            "transport": {
+              "type": "keyword"
+            },
+            "protocol": {
+              "type": "keyword"
+            },
+            "community_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "service": {
+          "properties": {
+            "name": {
+              "type": "keyword"
+            }
+          }
+        },
+        "honeypot": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword"
+            }
+          }
+        },
+        "observer": {
+          "properties": {
+            "name": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword"
+            }
+          }
+        },
+        "trapsig": {
+          "properties": {
+            "sensor_id": {
+              "type": "keyword"
+            },
+            "schema_version": {
+              "type": "keyword"
+            },
+            "internal": {
+              "type": "boolean"
+            },
+            "internal_reason": {
+              "type": "keyword"
+            },
+            "connection_id": {
+              "type": "keyword"
+            },
+            "sequence": {
+              "type": "integer"
+            },
+            "plugin": {
+              "type": "keyword"
+            },
+            "interaction": {
+              "type": "keyword"
+            },
+            "reply_suppressed": {
+              "type": "keyword"
+            },
+            "payload_excerpt": {
+              "type": "text",
+              "index": false
+            }
+          }
+        },
+        "authentication": {
+          "properties": {
+            "username": {
+              "type": "keyword"
+            },
+            "password": {
+              "type": "keyword"
+            }
+          }
+        },
+        "mqtt": {
+          "properties": {
+            "operation": {
+              "type": "keyword"
+            },
+            "packet_type": {
+              "type": "integer"
+            },
+            "flags": {
+              "type": "integer"
+            },
+            "remaining_length": {
+              "type": "integer"
+            },
+            "client_id": {
+              "type": "keyword",
+              "ignore_above": 1024
+            },
+            "protocol_level": {
+              "type": "integer"
+            },
+            "connect_flags": {
+              "type": "integer"
+            },
+            "keep_alive": {
+              "type": "integer"
+            },
+            "username_present": {
+              "type": "boolean"
+            },
+            "password_present": {
+              "type": "boolean"
+            },
+            "packet_id": {
+              "type": "integer"
+            },
+            "topic": {
+              "type": "keyword",
+              "ignore_above": 1024
+            },
+            "qos": {
+              "type": "integer"
+            },
+            "requested_qos": {
+              "type": "integer"
+            }
+          }
+        },
+        "iot": {
+          "properties": {
+            "operation": {
+              "type": "keyword"
+            }
+          }
+        },
+        "http": {
+          "properties": {
+            "request": {
+              "properties": {
+                "method": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "user_agent": {
+              "type": "keyword",
+              "ignore_above": 2048
+            },
+            "response": {
+              "properties": {
+                "status_code": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "url": {
+          "properties": {
+            "path": {
+              "type": "keyword"
+            }
+          }
+        },
+        "process": {
+          "properties": {
+            "command_line": {
+              "type": "keyword",
+              "ignore_above": 8192
+            }
+          }
+        },
+        "message": {
+          "type": "text"
+        },
+        "persona": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "keyword"
+            },
+            "device_type": {
+              "type": "keyword"
+            },
+            "vendor": {
+              "type": "keyword"
+            },
+            "model": {
+              "type": "keyword"
+            },
+            "firmware": {
+              "type": "keyword"
+            }
+          }
+        },
+        "modbus": {
+          "properties": {
+            "transaction_id": {
+              "type": "integer"
+            },
+            "unit_id": {
+              "type": "integer"
+            },
+            "function_code": {
+              "type": "integer"
+            },
+            "function": {
+              "type": "keyword"
+            },
+            "address": {
+              "type": "integer"
+            },
+            "quantity": {
+              "type": "integer"
+            },
+            "value": {
+              "type": "integer"
+            },
+            "exception_code": {
+              "type": "integer"
+            },
+            "write": {
+              "type": "boolean"
+            },
+            "mei_type": {
+              "type": "integer"
+            },
+            "read_device_id_code": {
+              "type": "integer"
+            },
+            "object_id": {
+              "type": "integer"
+            },
+            "response_length": {
+              "type": "integer"
+            },
+            "hardening_blocked": {
+              "type": "boolean"
+            }
+          }
+        },
+        "coap": {
+          "properties": {
+            "version": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "keyword"
+            },
+            "code": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "message_id": {
+              "type": "integer"
+            },
+            "token_length": {
+              "type": "integer"
+            },
+            "uri_path": {
+              "type": "keyword"
+            },
+            "uri_query": {
+              "type": "keyword"
+            },
+            "content_format": {
+              "type": "integer"
+            },
+            "payload_length": {
+              "type": "integer"
+            },
+            "option_count": {
+              "type": "integer"
+            },
+            "response_code": {
+              "type": "keyword"
+            },
+            "state_change": {
+              "type": "boolean"
+            },
+            "error": {
+              "type": "keyword"
+            },
+            "length": {
+              "type": "integer"
+            }
+          }
+        },
+        "rtsp": {
+          "properties": {
+            "method": {
+              "type": "keyword"
+            },
+            "uri": {
+              "type": "keyword"
+            },
+            "path": {
+              "type": "keyword"
+            },
+            "cseq": {
+              "type": "keyword"
+            },
+            "auth_scheme": {
+              "type": "keyword"
+            },
+            "transport": {
+              "type": "keyword"
+            },
+            "body_length": {
+              "type": "integer"
+            },
+            "status_code": {
+              "type": "integer"
+            }
+          }
+        },
+        "ftp": {
+          "properties": {
+            "command": {
+              "type": "keyword"
+            },
+            "argument": {
+              "type": "keyword"
+            },
+            "reply_code": {
+              "type": "integer"
+            },
+            "data_channel_refused": {
+              "type": "boolean"
+            }
+          }
+        },
+        "dns": {
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "opcode": {
+              "type": "integer"
+            },
+            "recursion_desired": {
+              "type": "boolean"
+            },
+            "qname": {
+              "type": "keyword"
+            },
+            "qtype": {
+              "type": "keyword"
+            },
+            "qclass": {
+              "type": "keyword"
+            },
+            "rcode": {
+              "type": "keyword"
+            },
+            "error": {
+              "type": "keyword"
+            }
+          }
+        },
+        "ssdp": {
+          "properties": {
+            "method": {
+              "type": "keyword"
+            },
+            "target": {
+              "type": "keyword"
+            },
+            "st": {
+              "type": "keyword"
+            },
+            "man": {
+              "type": "keyword"
+            },
+            "mx": {
+              "type": "keyword"
+            }
+          }
+        },
+        "hardening": {
+          "properties": {
+            "actions": {
+              "type": "keyword"
+            },
+            "decision_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "s7": {
+          "properties": {
+            "function": {
+              "type": "keyword"
+            },
+            "function_code": {
+              "type": "integer"
+            },
+            "write": {
+              "type": "boolean"
+            },
+            "identify": {
+              "type": "boolean"
+            },
+            "area": {
+              "type": "keyword"
+            },
+            "address": {
+              "type": "integer"
+            },
+            "szl_id": {
+              "type": "integer"
+            },
+            "hardening_blocked": {
+              "type": "boolean"
+            }
+          }
+        },
+        "bacnet": {
+          "properties": {
+            "service": {
+              "type": "keyword"
+            },
+            "property": {
+              "type": "keyword"
+            },
+            "object": {
+              "type": "keyword"
+            },
+            "write": {
+              "type": "boolean"
+            },
+            "identify": {
+              "type": "boolean"
+            },
+            "hardening_blocked": {
+              "type": "boolean"
+            }
+          }
+        },
+        "enip": {
+          "properties": {
+            "command": {
+              "type": "keyword"
+            },
+            "cip_service": {
+              "type": "integer"
+            },
+            "write": {
+              "type": "boolean"
+            },
+            "identify": {
+              "type": "boolean"
+            }
+          }
+        },
+        "atg": {
+          "properties": {
+            "command": {
+              "type": "keyword"
+            },
+            "write": {
+              "type": "boolean"
+            },
+            "identify": {
+              "type": "boolean"
+            },
+            "hardening_blocked": {
+              "type": "boolean"
+            }
+          }
+        },
+        "snmp": {
+          "properties": {
+            "version": {
+              "type": "keyword"
+            },
+            "community": {
+              "type": "keyword"
+            },
+            "pdu": {
+              "type": "keyword"
+            },
+            "oids": {
+              "type": "keyword"
+            },
+            "write": {
+              "type": "boolean"
+            },
+            "error": {
+              "type": "keyword"
+            }
+          }
+        },
+        "redis": {
+          "properties": {
+            "command": {
+              "type": "keyword"
+            },
+            "args": {
+              "type": "keyword"
+            },
+            "write": {
+              "type": "boolean"
+            },
+            "exploit": {
+              "type": "keyword"
+            }
+          }
+        },
+        "sip": {
+          "properties": {
+            "method": {
+              "type": "keyword"
+            },
+            "to_user": {
+              "type": "keyword"
+            },
+            "from_user": {
+              "type": "keyword"
+            },
+            "user_agent": {
+              "type": "keyword"
+            },
+            "auth_user": {
+              "type": "keyword"
+            },
+            "error": {
+              "type": "keyword"
+            }
+          }
+        },
+        "tftp": {
+          "properties": {
+            "opcode": {
+              "type": "keyword"
+            },
+            "filename": {
+              "type": "keyword"
+            },
+            "mode": {
+              "type": "keyword"
+            },
+            "error": {
+              "type": "keyword"
+            }
+          }
+        },
+        "vnc": {
+          "properties": {
+            "client_version": {
+              "type": "keyword"
+            },
+            "security_type": {
+              "type": "integer"
+            }
+          }
+        },
+        "rdp": {
+          "properties": {
+            "cookie_user": {
+              "type": "keyword"
+            },
+            "requested_protocols": {
+              "type": "long"
+            }
+          }
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "trapsig-events",
+    "trapsig_schema_version": "2"
+  }
+}

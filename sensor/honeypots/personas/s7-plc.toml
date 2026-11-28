@@ -1,0 +1,53 @@
+id = "s7-plc"
+version = 1
+name = "Kestrel KS-1500 CPU"
+device_type = "industrial_plc"
+vendor = "Kestrel Controls"
+model = "KS-1500"
+firmware = "V3.3.12"
+description = "S7-compatible PLC with SNMP management and a diagnostics web page."
+
+[fingerprint]
+hostname = "ks1500-press2"
+
+[credentials]
+accept = [["admin", "admin"]]
+
+[[services]]
+name = "s7"
+plugin = "s7comm"
+port = 10102
+public_port = 102
+
+[services.options]
+module = "KS 1516-3 PN/DP"
+serial = "S K-B4T918274"
+plant = "Press line 2"
+
+[[services]]
+name = "snmp"
+plugin = "snmp"
+port = 1161
+public_port = 161
+
+[services.options]
+read_communities = ["public"]
+write_communities = ["private"]
+location = "Press line 2 cabinet"
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8095
+public_port = 8095
+
+[services.options]
+server = "KestrelWeb/1.4"
+realm = "KS-1500"
+
+[services.options.pages."/"]
+body = "<html><title>$model</title><body><h1>$name</h1><p>Firmware $firmware</p><a href='/diag'>Diagnostics</a></body></html>"
+
+[services.options.pages."/diag"]
+auth = true
+body = "<html><body><p>CPU: RUN</p><p>Cycle 4 ms</p></body></html>"

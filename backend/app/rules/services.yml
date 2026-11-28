@@ -1,0 +1,164 @@
+name: iot-line-protocol-command
+id: 53c17c0d-9d98-4223-be92-c79204549b83
+title: Proprietary IoT line-protocol command
+status: stable
+level: informational
+generate: false
+detection:
+  selection:
+    service.name: iot-service
+    iot.operation|exists: true
+  condition: selection
+tests:
+  - match: true
+    events: [{service: {name: iot-service}, iot: {operation: status}}]
+---
+name: iot-service-probe
+id: 6752f921-3c7c-4641-9228-c17e00ebae4b
+title: Repeated probing of the proprietary IoT service
+status: stable
+version: 1
+level: low
+confidence: 0.7
+detection_type: RECONNAISSANCE
+description: Three or more commands against the VCP line protocol within five minutes.
+tags: [attack.discovery, attack.t1046, attack.t0888]
+correlation:
+  type: event_count
+  rules: [iot-line-protocol-command]
+  timespan: 5m
+  condition: {gte: 3}
+tests:
+  - match: true
+    events: [{service: {name: iot-service}, iot: {operation: info}, repeat: 3}]
+  - match: false
+    events: [{service: {name: iot-service}, iot: {operation: status}, repeat: 2}]
+---
+name: rtsp-request
+id: f937307c-a183-481d-92d6-ff67707d47c8
+title: RTSP request
+status: stable
+level: informational
+generate: false
+detection:
+  selection:
+    rtsp.method|exists: true
+  condition: selection
+tests:
+  - match: true
+    events: [{rtsp: {method: DESCRIBE, uri: rtsp://x/stream1}}]
+---
+name: rtsp-stream-enumeration
+id: 8e410e68-25e9-47e4-95da-d75898246351
+title: RTSP stream path enumeration
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: RECONNAISSANCE
+description: Four or more distinct RTSP URIs requested - camera stream-path brute forcing.
+tags: [attack.reconnaissance, attack.t1595.003]
+correlation:
+  type: value_count
+  rules: [rtsp-request]
+  field: rtsp.uri
+  timespan: 5m
+  condition: {gte: 4}
+tests:
+  - match: true
+    events:
+      - {rtsp: {method: DESCRIBE, uri: "rtsp://h/live"}}
+      - {rtsp: {method: DESCRIBE, uri: "rtsp://h/stream1"}}
+      - {rtsp: {method: DESCRIBE, uri: "rtsp://h/ch0_0.h264"}}
+      - {rtsp: {method: DESCRIBE, uri: "rtsp://h/cam/realmonitor"}}
+  - match: false
+    events: [{rtsp: {method: OPTIONS, uri: "rtsp://h/"}, repeat: 5}]
+---
+name: ftp-anonymous-login
+id: 422b714d-7ca4-438f-a246-00774b2ccbc0
+title: FTP anonymous login attempt
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: DEFAULT_CREDENTIALS
+description: USER anonymous/ftp - checking for an open anonymous share.
+tags: [attack.initial-access, attack.t1078.001]
+detection:
+  selection:
+    ftp.command: USER
+    ftp.argument: [anonymous, ftp]
+  condition: selection
+tests:
+  - match: true
+    events: [{ftp: {command: USER, argument: anonymous}}]
+  - match: false
+    events: [{ftp: {command: USER, argument: backup}}]
+---
+name: ftp-upload-attempt
+id: c718edff-55b2-4e4d-8d0a-ad0b80ededf1
+title: FTP upload attempt
+status: test
+version: 1
+level: high
+confidence: 0.85
+detection_type: MALWARE_DOWNLOAD
+description: STOR/APPE/STOU - staging a file on the device. The decoy discards all data.
+tags: [attack.command-and-control, attack.t1105]
+detection:
+  selection:
+    ftp.command: [STOR, APPE, STOU]
+  condition: selection
+tests:
+  - match: true
+    events: [{ftp: {command: STOR, argument: x.sh}}]
+  - match: false
+    events: [{ftp: {command: LIST}}]
+---
+name: ssdp-discovery
+id: 4bb5ee92-962a-4871-b249-623a333533a0
+title: SSDP/UPnP discovery
+status: test
+version: 1
+level: low
+confidence: 0.75
+detection_type: RECONNAISSANCE
+description: M-SEARCH or a device-description fetch - UPnP device enumeration.
+tags: [attack.discovery, attack.t1046]
+detection:
+  msearch:
+    ssdp.method: M-SEARCH
+  description:
+    url.path|endswith: [/rootDesc.xml, /description.xml, /upnp/desc.xml]
+  condition: msearch or description
+tests:
+  - match: true
+    events: [{ssdp: {method: M-SEARCH, st: "ssdp:all"}}]
+  - match: true
+    events: [{url: {path: /rootDesc.xml}}]
+  - match: false
+    events: [{ssdp: {method: NOTIFY}}]
+---
+name: dns-reflection-probe
+id: 64b0d1e2-7c3a-4b59-9e8f-1a2d3c4e5f60
+title: DNS ANY or version probe
+status: test
+version: 1
+level: medium
+confidence: 0.75
+detection_type: RECONNAISSANCE
+description: QTYPE ANY (reflection-amplifier test) or CHAOS version.bind fingerprinting.
+tags: [attack.reconnaissance, attack.t1595.002]
+detection:
+  any_query:
+    dns.qtype: ANY
+  version:
+    dns.qname|endswith: [version.bind, version.server, hostname.bind]
+  condition: any_query or version
+tests:
+  - match: true
+    events: [{dns: {qname: example.lab, qtype: ANY}}]
+  - match: true
+    events: [{dns: {qname: version.bind, qtype: TXT}}]
+  - match: false
+    events: [{dns: {qname: gateway.lab, qtype: A}}]

@@ -1,0 +1,114 @@
+{
+  "index_patterns": [
+    "trapsig-hardening-decisions"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "decision_id": {
+          "type": "keyword"
+        },
+        "source_ip": {
+          "type": "ip"
+        },
+        "context": {
+          "type": "keyword"
+        },
+        "stage": {
+          "type": "keyword"
+        },
+        "returning": {
+          "type": "boolean"
+        },
+        "detection_types": {
+          "type": "keyword"
+        },
+        "action": {
+          "type": "keyword"
+        },
+        "enforced_action": {
+          "type": "keyword"
+        },
+        "effects": {
+          "type": "keyword"
+        },
+        "previous_action": {
+          "type": "keyword"
+        },
+        "changed": {
+          "type": "boolean"
+        },
+        "mode": {
+          "type": "keyword"
+        },
+        "chosen_by": {
+          "type": "keyword"
+        },
+        "reason": {
+          "type": "text"
+        },
+        "decided_at": {
+          "type": "date"
+        },
+        "expires_at": {
+          "type": "date"
+        },
+        "status": {
+          "type": "keyword"
+        },
+        "agent_version": {
+          "type": "keyword"
+        },
+        "outcome": {
+          "properties": {
+            "reward": {
+              "type": "float"
+            },
+            "intel": {
+              "type": "float"
+            },
+            "new_behaviours": {
+              "type": "integer"
+            },
+            "engaged": {
+              "type": "float"
+            },
+            "harm_events": {
+              "type": "integer"
+            },
+            "events": {
+              "type": "integer"
+            },
+            "credited_to": {
+              "type": "keyword"
+            },
+            "evaluated_at": {
+              "type": "date"
+            },
+            "explanation": {
+              "type": "text"
+            }
+          }
+        },
+        "samples": {
+          "type": "object",
+          "enabled": false
+        },
+        "means": {
+          "type": "object",
+          "enabled": false
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "RL hardening decisions with reasons and measured outcomes",
+    "trapsig_schema_version": "2"
+  }
+}

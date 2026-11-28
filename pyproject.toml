@@ -1,0 +1,32 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+[tool.ruff]
+target-version = "py312"
+line-length = 160
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+# Type checking is scoped to the new learned-detection / adaptation / single-writer
+# modules, which are written to be fully typed. The rest of the codebase predates
+# this and is intentionally not gated yet (widening the scope is a follow-up).
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+files = [
+  "backend/app/services/ml",
+  "backend/app/services/leader.py",
+  "backend/app/services/hardening.py",
+  "backend/app/services/fleet.py",
+  "backend/app/services/hardening_sim.py",
+  "backend/app/services/processor.py",
+  "backend/app/services/detection",
+  "backend/app/services/experiment_lab.py",
+  "backend/app/services/network.py",
+  "backend/app/security.py",
+]
+
+# Pre-existing, not yet typed; pulled in transitively by experiment_lab. Widening
+# typed coverage here is tracked in docs/project/ROADMAP.md rather than silently ignored.
+[[tool.mypy.overrides]]
+module = ["backend.app.services.evaluation", "app.services.evaluation"]
+ignore_errors = true

@@ -1,0 +1,19 @@
+id: router-upnp-discovery
+name: UPnP/SSDP device discovery chain
+description: M-SEARCH for all devices, root devices and Internet Gateway Devices, then fetches the advertised description document.
+trial_kind: attack
+target_services:
+- ssdp
+- web
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1046
+steps:
+- service: ssdp
+  search_targets:
+  - ssdp:all
+  - upnp:rootdevice
+  - urn:schemas-upnp-org:device:InternetGatewayDevice:1
+- service: web
+  port: 49152
+  path: /rootDesc.xml

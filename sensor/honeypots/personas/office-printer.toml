@@ -1,0 +1,49 @@
+id = "office-printer"
+version = 1
+name = "Lumen LP-450 Multifunction Printer"
+device_type = "printer"
+vendor = "Lumen"
+model = "LP-450"
+firmware = "4.07"
+description = "Network printer: SNMP with default communities, embedded web server, scan-to-FTP."
+
+[fingerprint]
+hostname = "lp450-floor1"
+
+[credentials]
+accept = [["admin", "admin"]]
+
+[[services]]
+name = "snmp"
+plugin = "snmp"
+port = 1161
+public_port = 161
+
+[services.options]
+location = "Floor 1 copy room"
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8100
+public_port = 80
+
+[services.options]
+server = "Lumen-EWS/4.07"
+
+[services.options.pages."/"]
+body = "<html><title>LP-450</title><body><h1>$name</h1><p>Toner 61%</p><a href='/admin'>Admin</a></body></html>"
+
+[services.options.pages."/admin"]
+auth = true
+body = "<html><body><p>Network settings</p></body></html>"
+
+[[services]]
+name = "ftp"
+plugin = "ftp"
+port = 2123
+public_port = 21
+
+[services.options]
+banner = "LP-450 FTP server ready"
+allow_anonymous = true

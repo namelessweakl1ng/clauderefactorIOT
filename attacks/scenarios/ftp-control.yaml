@@ -1,0 +1,13 @@
+id: ftp-control
+name: Single failed FTP login (control)
+description: One mistyped password.
+trial_kind: control
+target_services:
+- ftp
+expected_detection: null
+severity: low
+steps:
+- service: ftp
+  port: 2121
+  username: admin
+  password: wrong-once

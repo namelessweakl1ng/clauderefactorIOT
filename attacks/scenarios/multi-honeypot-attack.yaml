@@ -1,0 +1,34 @@
+id: multi-honeypot-attack
+name: Multi-honeypot attack
+description: Deterministic bounded interaction across all six logical services
+trial_kind: attack
+target_services:
+- ssh
+- telnet
+- camera
+- iot
+- mqtt
+- router
+expected_detection: MULTI_STAGE_ATTACK
+severity: high
+steps:
+- service: ssh
+  username: admin
+  password: wrong
+- service: telnet
+  payload: admin\r\nwrong\r\n
+- service: camera
+  path: /device
+- service: iot
+  payload: STATUS\r\n
+- service: mqtt
+  operation: connect
+  client_id: mqtt-explorer
+- service: mqtt
+  operation: subscribe
+  topic: '#'
+- service: router
+  path: /login
+  username: admin
+  password: admin
+  auth_mode: form

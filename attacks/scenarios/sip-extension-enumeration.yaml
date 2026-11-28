@@ -1,0 +1,24 @@
+id: sip-extension-enumeration
+name: SIP extension enumeration
+description: 'REGISTER for ten consecutive extensions (svwar): 401 vs 404 reveals which ones exist.'
+trial_kind: attack
+target_services:
+- sip
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1087
+steps:
+- service: sip
+  method: REGISTER
+  user_agent: Zoiper rv2.10.19
+  extensions:
+  - '100'
+  - '101'
+  - '102'
+  - '103'
+  - '104'
+  - '105'
+  - '106'
+  - '107'
+  - '108'
+  - '109'

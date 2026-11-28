@@ -1,0 +1,36 @@
+{
+  "index_patterns": [
+    "trapsig-rule-state"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "rule_id": {
+          "type": "keyword"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "updated_at": {
+          "type": "date"
+        },
+        "updated_by": {
+          "type": "keyword"
+        },
+        "reason": {
+          "type": "text"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "Operator rule activation overrides",
+    "trapsig_schema_version": "2"
+  }
+}

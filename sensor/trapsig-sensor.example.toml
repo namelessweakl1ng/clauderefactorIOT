@@ -1,0 +1,17 @@
+# TRAPSIG sensor agent configuration (copy to trapsig-sensor.toml on each device).
+# Same file on Pi OS Lite, Linux and Windows; only sensor_id differs per device.
+sensor_id = "host-office"                     # must match an entry in sensor/fleet.toml (or the console)
+backend_url = "http://192.168.50.5:8000"      # analysis machine
+api_key = ""                                  # sensor-role key: API_KEYS="...,sensor:<key>"
+ingest_url = "http://192.168.50.5:5045"       # Logstash HTTP input on the analysis machine
+ingest_user = "trapsig"
+ingest_password = "change-this-ingest-password"
+# sensor_ip = "192.168.50.31"                 # default: the address used to reach the backend
+# data_dir = "/var/lib/trapsig-sensor"        # Windows default: %ProgramData%\trapsig-sensor
+# poll_seconds = 30
+
+# Optional: ship a Cowrie container's log (Pi): docker compose up -d cowrie
+# [[extra_logs]]
+# path = "/var/lib/docker/volumes/trapsig-sensor_cowrie-logs/_data/cowrie.json"
+# honeypot_type = "ssh_telnet"
+# honeypot_id = "cowrie-01"

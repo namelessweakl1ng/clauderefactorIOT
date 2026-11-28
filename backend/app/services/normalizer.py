@@ -1,0 +1,202 @@
+from datetime import datetime, timezone
+from hashlib import sha256
+from ipaddress import ip_address
+from typing import Any, Callable
+
+from .telemetry import SCHEMA_VERSION, is_loopback
+
+# Mirrors the controlled-namespace whitelist in elk/logstash/pipelines/20-json-honeypots.conf.
+V2_NAMESPACES: dict[str, tuple[str, ...]] = {
+    "persona": ("id", "name", "device_type", "vendor", "model", "firmware"),
+    "modbus": (
+        "transaction_id",
+        "unit_id",
+        "function_code",
+        "function",
+        "address",
+        "quantity",
+        "value",
+        "exception_code",
+        "write",
+        "hardening_blocked",
+        "mei_type",
+        "read_device_id_code",
+        "object_id",
+        "response_length",
+    ),
+    "coap": (
+        "version",
+        "type",
+        "code",
+        "method",
+        "message_id",
+        "token_length",
+        "uri_path",
+        "uri_query",
+        "content_format",
+        "payload_length",
+        "option_count",
+        "response_code",
+        "state_change",
+        "error",
+        "length",
+    ),
+    "rtsp": ("method", "uri", "path", "cseq", "auth_scheme", "transport", "body_length", "status_code"),
+    "ftp": ("command", "argument", "reply_code", "data_channel_refused"),
+    "dns": ("id", "opcode", "recursion_desired", "qname", "qtype", "qclass", "rcode", "error"),
+    "ssdp": ("method", "target", "st", "man", "mx"),
+    "hardening": ("actions", "decision_id"),
+    "process": ("command_line",),
+    "s7": (
+        "function",
+        "function_code",
+        "write",
+        "identify",
+        "area",
+        "address",
+        "szl_id",
+        "hardening_blocked",
+    ),
+    "bacnet": (
+        "service",
+        "property",
+        "object",
+        "write",
+        "identify",
+        "hardening_blocked",
+    ),
+    "enip": (
+        "command",
+        "cip_service",
+        "write",
+        "identify",
+    ),
+    "atg": (
+        "command",
+        "write",
+        "identify",
+        "hardening_blocked",
+    ),
+    "snmp": (
+        "version",
+        "community",
+        "pdu",
+        "oids",
+        "write",
+        "error",
+    ),
+    "redis": (
+        "command",
+        "args",
+        "write",
+        "exploit",
+    ),
+    "sip": (
+        "method",
+        "to_user",
+        "from_user",
+        "user_agent",
+        "auth_user",
+        "error",
+    ),
+    "tftp": (
+        "opcode",
+        "filename",
+        "mode",
+        "error",
+    ),
+    "vnc": (
+        "client_version",
+        "security_type",
+    ),
+    "rdp": (
+        "cookie_user",
+        "requested_protocols",
+    ),
+}
+V2_TOP_LEVEL = {
+    "community_id": ("network", "community_id"),
+    "connection_id": ("trapsig", "connection_id"),
+    "sequence": ("trapsig", "sequence"),
+    "plugin": ("trapsig", "plugin"),
+    "interaction": ("trapsig", "interaction"),
+    "reply_suppressed": ("trapsig", "reply_suppressed"),
+}
+
+
+def normalize(raw: dict[str, Any], honeypot_type: str, honeypot_id: str, sensor_id: str, now: Callable[[], datetime] | None = None) -> dict[str, Any]:
+    """Reference equivalent of Logstash mappings for contract and smoke tests."""
+    cowrie = honeypot_type == "ssh_telnet"
+    timestamp = raw.get("timestamp") or raw.get("@timestamp")
+    source_ip = raw.get("src_ip") if cowrie else raw.get("source_ip")
+    destination_ip = raw.get("destination_ip")
+    if not timestamp or not source_ip or not destination_ip:
+        raise ValueError("timestamp, source IP, and destination IP are required")
+    try:
+        ip_address(str(source_ip))
+        ip_address(str(destination_ip))
+    except ValueError as exc:
+        raise ValueError("source and destination IPs must be valid IPv4 or IPv6") from exc
+    identifier = f"{raw.get('eventid')}-{raw.get('session', '')}-{timestamp}" if cowrie and raw.get("eventid") else raw.get("event_id")
+    identifier = identifier or sha256(f"{timestamp}|{source_ip}|{raw}".encode()).hexdigest()
+    cowrie_id = raw.get("eventid", "")
+    login = cowrie_id in {"cowrie.login.failed", "cowrie.login.success"}
+    category = "authentication" if login else "process" if cowrie_id == "cowrie.command.input" else raw.get("category", "session" if cowrie else "network")
+    outcome = "failure" if cowrie_id == "cowrie.login.failed" else "success" if cowrie_id == "cowrie.login.success" else raw.get("outcome", "unknown")
+    event: dict[str, Any] = {
+        "@timestamp": timestamp,
+        "event": {
+            "id": identifier,
+            "ingested": (now or (lambda: datetime.now(timezone.utc)))().astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "category": category,
+            "type": raw.get("type", "info"),
+            "action": "login_attempt" if login else "command" if cowrie_id == "cowrie.command.input" else raw.get("action", "observe"),
+            "outcome": outcome,
+        },
+        "source": {"ip": source_ip, "port": raw.get("src_port") or raw.get("source_port")},
+        "destination": {"ip": destination_ip, "port": raw.get("dst_port") or raw.get("destination_port")},
+        "network": {
+            "transport": raw.get("transport") if not cowrie and raw.get("transport") in {"tcp", "udp"} else "tcp",
+            "protocol": (raw.get("protocol") or ("telnet" if raw.get("dst_port") == 2223 else "ssh")) if cowrie else raw.get("protocol"),
+        },
+        "service": {"name": "cowrie" if cowrie else raw.get("service")},
+        "honeypot": {"id": honeypot_id, "type": honeypot_type},
+        "observer": {"name": "trapsig-pi", "type": "honeypot_sensor"},
+        "trapsig": {
+            "sensor_id": sensor_id,
+            "schema_version": "2" if not cowrie and str(raw.get("schema_version")) == "2" else SCHEMA_VERSION,
+            "internal": is_loopback(source_ip),
+        },
+        "message": raw.get("summary") or raw.get("message", identifier),
+    }
+    if event["trapsig"]["internal"]:
+        event["trapsig"]["internal_reason"] = "loopback_source"
+    for container in ("source", "destination"):
+        if event[container]["port"] is not None:
+            event[container]["port"] = int(event[container]["port"])
+    authentication = raw.get("authentication") or ({"username": raw.get("username"), "password": raw.get("password")} if login else None)
+    if authentication:
+        event["authentication"] = authentication
+    if raw.get("url"):
+        event["url"] = {"path": raw["url"].get("path")}
+    if raw.get("http"):
+        event["http"] = raw["http"]
+    if raw.get("mqtt"):
+        event["mqtt"] = dict(raw["mqtt"])
+        if event["mqtt"].get("packet_type") is not None:
+            event["mqtt"]["packet_type"] = int(event["mqtt"]["packet_type"])
+    if cowrie_id == "cowrie.command.input":
+        event["process"] = {"command_line": raw.get("input", "")}
+    if event["trapsig"]["schema_version"] == "2":
+        for namespace, keys in V2_NAMESPACES.items():
+            values = raw.get(namespace)
+            if isinstance(values, dict):
+                kept = {key: values[key] for key in keys if values.get(key) is not None}
+                if kept:
+                    event[namespace] = kept
+        for source, (container, key) in V2_TOP_LEVEL.items():
+            if raw.get(source) is not None:
+                event.setdefault(container, {})[key] = raw[source]
+        if raw.get("payload_excerpt") is not None:
+            event["trapsig"]["payload_excerpt"] = str(raw["payload_excerpt"])[:4096]
+    return event

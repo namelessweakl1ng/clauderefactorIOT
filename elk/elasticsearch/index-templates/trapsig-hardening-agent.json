@@ -1,0 +1,35 @@
+{
+  "index_patterns": [
+    "trapsig-hardening-agent"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "updated_at": {
+          "type": "date"
+        },
+        "agent_version": {
+          "type": "keyword"
+        },
+        "posteriors": {
+          "type": "object",
+          "enabled": false
+        },
+        "config": {
+          "type": "object",
+          "enabled": false
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "RL hardening agent state (Beta posteriors per context x action)",
+    "trapsig_schema_version": "2"
+  }
+}

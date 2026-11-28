@@ -1,0 +1,63 @@
+{
+  "index_patterns": [
+    "trapsig-sensor-instances"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "instance_id": {
+          "type": "keyword"
+        },
+        "sensor_id": {
+          "type": "keyword"
+        },
+        "persona_id": {
+          "type": "keyword"
+        },
+        "hostname": {
+          "type": "keyword"
+        },
+        "sensor_ip": {
+          "type": "keyword"
+        },
+        "received_at": {
+          "type": "date"
+        },
+        "sent_at": {
+          "type": "date"
+        },
+        "uptime_seconds": {
+          "type": "float"
+        },
+        "agent_version": {
+          "type": "keyword"
+        },
+        "persona_origin": {
+          "type": "keyword"
+        },
+        "persona": {
+          "type": "object",
+          "enabled": false
+        },
+        "services": {
+          "type": "object",
+          "enabled": false
+        },
+        "process": {
+          "type": "object",
+          "enabled": false
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "Latest heartbeat per (sensor, persona) instance",
+    "trapsig_schema_version": "2"
+  }
+}

@@ -1,0 +1,103 @@
+name: mqtt-topic-enumeration
+id: 233851d3-d350-445b-add9-62893417b253
+title: MQTT wildcard or system-topic subscription
+status: stable
+version: 1
+level: medium
+confidence: 0.85
+detection_type: MQTT_PROBING
+description: Subscribing to '#', '+' or '$SYS' enumerates the topics the broker serves.
+tags: [attack.discovery, attack.t1046, attack.collection, attack.t0861]
+detection:
+  subscribe:
+    mqtt.operation: subscribe
+  wildcard:
+    mqtt.topic|contains: ["#", "$SYS", "+"]
+  condition: subscribe and wildcard
+tests:
+  - match: true
+    events: [{network: {protocol: mqtt}, mqtt: {operation: subscribe, topic: "#"}}]
+  - match: false
+    events: [{network: {protocol: mqtt}, mqtt: {operation: subscribe, topic: "home/livingroom/temp"}}]
+---
+name: mqtt-active-session
+id: 1131281e-5bcf-4a46-b4b8-91238803e715
+title: Active MQTT client behaviour
+status: stable
+version: 1
+level: low
+confidence: 0.65
+detection_type: MQTT_PROBING
+description: A client went beyond CONNECT (subscribe/publish/unsubscribe) on the decoy broker.
+tags: [attack.discovery, attack.t1046]
+detection:
+  selection:
+    mqtt.operation: [subscribe, publish, unsubscribe]
+  condition: selection
+tests:
+  - match: true
+    events: [{mqtt: {operation: publish, topic: a/b}}]
+  - name: a lone CONNECT stays a negative control
+    match: false
+    events: [{mqtt: {operation: connect}}]
+---
+name: mqtt-command-publish
+id: 184a3e84-fea5-4a20-8c3c-a8708ff4c776
+title: Publish to a device command topic
+status: test
+version: 1
+level: high
+confidence: 0.8
+detection_type: UNAUTHORIZED_COMMAND
+description: Publishing to topics that look like actuator or configuration channels.
+tags: [attack.impair-process-control, attack.t0855]
+detection:
+  selection:
+    mqtt.operation: publish
+    mqtt.topic|re: '(^|/)(cmd|command|set|control|config|ota|firmware)(/|$)'
+  condition: selection
+tests:
+  - match: true
+    events: [{mqtt: {operation: publish, topic: "devices/hvac-01/set"}}]
+  - match: false
+    events: [{mqtt: {operation: publish, topic: "sensors/temp"}}]
+---
+name: coap-resource-discovery
+id: e8dcfe08-0fdc-42d7-b2da-c449396e44d8
+title: CoAP resource discovery
+status: test
+version: 1
+level: medium
+confidence: 0.85
+detection_type: RECONNAISSANCE
+description: GET /.well-known/core lists every resource a constrained device exposes (RFC 6690).
+tags: [attack.discovery, attack.t1046, attack.t0888]
+detection:
+  selection:
+    coap.uri_path|endswith: .well-known/core
+  condition: selection
+tests:
+  - match: true
+    events: [{network: {protocol: coap}, coap: {method: GET, uri_path: /.well-known/core}}]
+  - match: false
+    events: [{coap: {method: GET, uri_path: /sensors/temp}}]
+---
+name: coap-state-change
+id: 2837b593-c927-4707-9968-7d93a2f65e0a
+title: CoAP state-changing request
+status: test
+version: 1
+level: high
+confidence: 0.8
+detection_type: UNAUTHORIZED_COMMAND
+description: PUT/POST/DELETE against a constrained device resource.
+tags: [attack.impair-process-control, attack.t0855, attack.t0836]
+detection:
+  selection:
+    coap.method: [PUT, POST, DELETE]
+  condition: selection
+tests:
+  - match: true
+    events: [{coap: {method: PUT, uri_path: /actuators/valve}}]
+  - match: false
+    events: [{coap: {method: GET, uri_path: /actuators/valve}}]

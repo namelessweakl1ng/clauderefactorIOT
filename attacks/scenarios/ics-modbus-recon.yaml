@@ -1,0 +1,26 @@
+id: ics-modbus-recon
+name: Modbus device fingerprint and register sweep
+description: Read Device Identification and Report Server ID, then sweep holding and input registers to map process points.
+trial_kind: attack
+target_services:
+- modbus
+expected_detection: ICS_RECONNAISSANCE
+severity: high
+models: T0888, T0861
+steps:
+- service: modbus
+  requests:
+  - function: read_device_identification
+  - function: report_server_id
+  sweep:
+    function: read_holding_registers
+    start: 0
+    stop: 16
+    step: 2
+    quantity: 2
+- service: modbus
+  sweep:
+    function: read_input_registers
+    start: 0
+    stop: 8
+    step: 1

@@ -1,0 +1,57 @@
+{
+  "index_patterns": [
+    "trapsig-audit"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "audit_id": {
+          "type": "keyword"
+        },
+        "timestamp": {
+          "type": "date"
+        },
+        "principal": {
+          "type": "keyword"
+        },
+        "role": {
+          "type": "keyword"
+        },
+        "authenticated": {
+          "type": "boolean"
+        },
+        "method": {
+          "type": "keyword"
+        },
+        "path": {
+          "type": "keyword"
+        },
+        "query": {
+          "type": "keyword"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "outcome": {
+          "type": "keyword"
+        },
+        "client_ip": {
+          "type": "ip"
+        },
+        "request_id": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "Append-only API audit trail",
+    "trapsig_schema_version": "2"
+  }
+}

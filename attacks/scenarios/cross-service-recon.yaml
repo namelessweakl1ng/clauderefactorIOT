@@ -1,0 +1,21 @@
+id: cross-service-recon
+name: Cross-service reconnaissance
+description: Fingerprint AsterView and Nexora endpoints, then inspect MQTT topics
+trial_kind: attack
+target_services:
+- camera
+- router
+- mqtt
+expected_detection: MULTI_SERVICE_ACTIVITY
+severity: medium
+steps:
+- service: camera
+  path: /
+- service: router
+  path: /status
+- service: mqtt
+  operation: connect
+  client_id: mqtt-explorer
+- service: mqtt
+  operation: subscribe
+  topic: '#'

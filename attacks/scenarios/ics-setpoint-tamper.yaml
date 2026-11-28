@@ -1,0 +1,30 @@
+id: ics-setpoint-tamper
+name: PLC setpoint tampering
+description: Reads the oven setpoint, overwrites it with an unsafe value, writes a block of registers and reads back to verify, the pattern of process-manipulation malware.
+trial_kind: attack
+target_services:
+- modbus
+expected_detection: ICS_WRITE
+severity: critical
+models: T0855, T0836
+steps:
+- service: modbus
+  requests:
+  - function: read_holding_registers
+    address: 0
+    quantity: 4
+  - function: write_single_register
+    address: 1
+    value: 2600
+  - function: write_multiple_registers
+    address: 8
+    values:
+    - 0
+    - 0
+    - 0
+  - function: write_single_coil
+    address: 0
+    value: true
+  - function: read_holding_registers
+    address: 0
+    quantity: 4

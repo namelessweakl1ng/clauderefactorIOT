@@ -1,0 +1,14 @@
+id: s7-logic-download
+name: S7 program block download
+description: 'Request-download then a variable write: the pattern of a logic implant pushed to the controller.'
+trial_kind: attack
+target_services:
+- s7
+expected_detection: ICS_WRITE
+severity: critical
+models: T0843 -> T0836
+steps:
+- service: s7
+  operations:
+  - request_download
+  - write_var

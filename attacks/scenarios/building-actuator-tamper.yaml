@@ -1,0 +1,22 @@
+id: building-actuator-tamper
+name: CoAP actuator tampering
+description: Discovers actuators, forces the damper fully open, raises the setpoint and deletes a resource.
+trial_kind: attack
+target_services:
+- coap
+expected_detection: UNAUTHORIZED_COMMAND
+severity: high
+models: T0855, T0836
+steps:
+- service: coap
+  requests:
+  - method: GET
+    path: /.well-known/core
+  - method: PUT
+    path: /actuators/damper
+    payload: '100'
+  - method: PUT
+    path: /actuators/setpoint
+    payload: '35.0'
+  - method: DELETE
+    path: /actuators/damper

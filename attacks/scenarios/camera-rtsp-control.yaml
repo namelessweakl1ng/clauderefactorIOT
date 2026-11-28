@@ -1,0 +1,13 @@
+id: camera-rtsp-control
+name: RTSP control (OPTIONS)
+description: A single capability query, like a legitimate player's first request.
+trial_kind: control
+target_services:
+- rtsp
+expected_detection: null
+severity: low
+steps:
+- service: rtsp
+  method: OPTIONS
+  paths:
+  - /

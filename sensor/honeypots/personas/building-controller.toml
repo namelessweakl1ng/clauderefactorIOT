@@ -1,0 +1,66 @@
+# Fictional smart-building HVAC controller: CoAP sensors/actuators plus a
+# Modbus gateway on a non-standard port and a web UI.
+id = "building-controller"
+version = 1
+name = "Corvane BC-40 Building Controller"
+device_type = "building_controller"
+vendor = "Corvane Systems"
+model = "BC-40"
+firmware = "2.9.0"
+description = "Floor HVAC controller exposing CoAP resources (RFC 6690 discovery) and a Modbus gateway."
+enabled = true
+
+[fingerprint]
+hostname = "bc40-floor2"
+os = "Zephyr 3.x"
+
+[credentials]
+accept = [["admin", "corvane"], ["admin", "admin"]]
+
+[interaction]
+max_messages = 64
+max_seconds = 120
+
+[[services]]
+name = "coap"
+plugin = "coap"
+port = 5683
+public_port = 5683
+
+[services.options]
+read_only = false
+
+[services.options.resources]
+"/sensors/temperature" = "22.1"
+"/sensors/co2" = "612"
+"/sensors/occupancy" = "1"
+"/actuators/damper" = "35"
+"/actuators/setpoint" = "21.0"
+
+[[services]]
+name = "modbus"
+plugin = "modbus"
+port = 5021
+public_port = 5021
+
+[services.options]
+unit_id = 3
+holding_registers = [210, 35, 1, 0, 0, 0, 0, 0]
+input_registers = [221, 612, 1, 0]
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8091
+public_port = 8091
+
+[services.options]
+server = "Corvane-httpd/1.1"
+realm = "BC-40"
+
+[services.options.pages."/"]
+body = "<html><title>$model</title><body><h1>$name</h1><a href='/zones'>Zones</a></body></html>"
+
+[services.options.pages."/zones"]
+auth = true
+body = "<html><body><table><tr><td>Zone 2A</td><td>22.1 C</td></tr></table></body></html>"

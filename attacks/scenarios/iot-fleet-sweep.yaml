@@ -1,0 +1,39 @@
+id: iot-fleet-sweep
+name: Cross-device IoT service sweep
+description: One light touch on each of six device services (Modbus, CoAP, RTSP, FTP, DNS, web) within two minutes, the footprint of a horizontal IoT scanner.
+trial_kind: attack
+target_services:
+- modbus
+- coap
+- rtsp
+- ftp
+- dns
+- web
+expected_detection: MULTI_SERVICE_ACTIVITY
+severity: medium
+models: T1046
+steps:
+- service: modbus
+  requests:
+  - function: read_holding_registers
+    address: 0
+    quantity: 1
+- service: coap
+  requests:
+  - method: GET
+    path: /.well-known/core
+- service: rtsp
+  method: OPTIONS
+  paths:
+  - /
+- service: ftp
+  port: 2121
+  username: anonymous
+  password: scan@
+- service: dns
+  queries:
+  - name: nexora-gw.lan
+    type: A
+- service: web
+  port: 8091
+  path: /

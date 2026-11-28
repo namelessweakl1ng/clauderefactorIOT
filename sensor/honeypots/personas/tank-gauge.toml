@@ -1,0 +1,30 @@
+id = "tank-gauge"
+version = 1
+name = "Petrova TLS-450 Tank Monitor"
+device_type = "tank_gauge"
+vendor = "Petrova"
+model = "TLS-450"
+firmware = "4.1.2"
+description = "Automatic tank gauge at a fuel station: Guardian AST serial-over-TCP protocol plus a status page."
+
+[fingerprint]
+hostname = "tls450-station22"
+
+[[services]]
+name = "atg"
+plugin = "atg"
+port = 10001
+public_port = 10001
+
+[services.options]
+station = "PETROVA FUEL 22 RIVERSIDE"
+tanks = ["UNLEADED", "PREMIUM", "DIESEL", "KEROSENE"]
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8096
+public_port = 8096
+
+[services.options.pages."/"]
+body = "<html><title>TLS-450</title><body><h1>$name</h1><p>4 tanks online</p></body></html>"

@@ -1,0 +1,15 @@
+id: tftp-phone-config-theft
+name: IP phone provisioning file theft
+description: TFTP RRQ for the phone's provisioning files, which on real phones hold SIP passwords.
+trial_kind: attack
+target_services:
+- tftp
+expected_detection: RECONNAISSANCE
+severity: medium
+models: T1552.001
+steps:
+- service: tftp
+  operation: read
+  files:
+  - SEP001122334455.cnf.xml
+  - spa.cfg

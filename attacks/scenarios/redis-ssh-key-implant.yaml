@@ -1,0 +1,32 @@
+id: redis-ssh-key-implant
+name: Redis authorized_keys implant
+description: 'INFO, then CONFIG SET dir/dbfilename to /root/.ssh/authorized_keys, SET a key and SAVE: the classic unauthenticated Redis-to-SSH technique. The decoy
+  acknowledges and writes nothing.'
+trial_kind: attack
+target_services:
+- redis
+expected_detection: EXPLOIT_ATTEMPT
+severity: critical
+models: T1190 -> T1098.004
+steps:
+- service: redis
+  commands:
+  - - INFO
+  - - CONFIG
+    - SET
+    - dir
+    - /root/.ssh
+  - - CONFIG
+    - SET
+    - dbfilename
+    - authorized_keys
+  - - SET
+    - x
+    - '
+
+
+      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC0trapsig attacker@lab
+
+
+      '
+  - - SAVE

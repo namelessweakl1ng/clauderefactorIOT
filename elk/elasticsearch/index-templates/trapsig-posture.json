@@ -1,0 +1,55 @@
+{
+  "index_patterns": [
+    "trapsig-posture"
+  ],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "source_ip": {
+          "type": "ip"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "entered_at": {
+          "type": "date"
+        },
+        "updated_at": {
+          "type": "date"
+        },
+        "last_detection_at": {
+          "type": "date"
+        },
+        "detection_count_in_window": {
+          "type": "integer"
+        },
+        "trapsig": {
+          "properties": {
+            "schema_version": {
+              "type": "keyword"
+            }
+          }
+        },
+        "action": {
+          "type": "keyword"
+        },
+        "actions": {
+          "type": "keyword"
+        },
+        "decision_id": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "description": "trapsig-posture",
+    "trapsig_schema_version": "1"
+  }
+}

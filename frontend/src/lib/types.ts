@@ -1,0 +1,73 @@
+export type ServiceState = "healthy" | "running" | "configured" | "stopped" | "unreachable" | "unavailable" | string;
+
+export interface SystemStatus {
+  backend?: ServiceState;
+  elasticsearch?: ServiceState;
+  logstash?: ServiceState;
+  pi?: ServiceState;
+  kibana_url?: string;
+  honeypots?: Record<string, ServiceState>;
+  counts?: { events?: number | null; sessions?: number | null; detections?: number | null; experiments?: number | null };
+  processor?: { last_run?: string | null };
+}
+
+export interface Scenario { id: string; name: string; description: string; trial_kind: "attack" | "control"; expected_detection: string | null; severity: string; target_honeypots: string[]; target_services: string[]; step_count: number; manifest_sha256: string; }
+
+export interface EvaluationRow { scenario_id: string; trial_kind: string; expected_detection: string | null; run_count: number; scored_count: number; inconclusive_count: number; tp?: number; fn?: number; tn?: number; fp?: number; detection_rate?: number | null; false_positive_rate?: number | null }
+export interface RuleEvaluation { detection_type: string; tp: number; fn: number; fp: number; tn: number; precision: number | null; recall: number | null; f1: number | null; specificity: number | null; false_positive_rate: number | null }
+export interface EvaluationCohort { evaluation_config_fingerprint: string; overall: Record<string, number | null>; per_scenario: EvaluationRow[]; per_detection_type: RuleEvaluation[]; latency: Record<string, { count: number; mean: number | null; p95: number | null }>; controls: { runs: number; tn: number; fp: number } }
+export interface EvaluationResultCounts { TP: number; FN: number; FP: number; TN: number; INCONCLUSIVE: number }
+export interface UnversionedScenarioRow { scenario_id: string; trial_kind: string; expected_detection: string | null; run_count: number; result_counts: EvaluationResultCounts; telemetry_steps_covered: number; telemetry_step_count: number }
+export interface UnversionedEvaluationBatch { evaluation_batch_id: string; latest_end_time: string; completed_experiments: number; result_counts: EvaluationResultCounts; telemetry_steps_covered: number; telemetry_step_count: number; source_ip_count: number; session_timeout_seconds: number | null; per_scenario: UnversionedScenarioRow[] }
+export interface EvaluationSummary { cohorts: EvaluationCohort[]; most_recent_evaluation_config_fingerprint: string | null; legacy_incomplete_count: number; unversioned_batches: UnversionedEvaluationBatch[] }
+
+export interface Experiment {
+  experiment_id: string;
+  name: string;
+  description?: string;
+  scenario_id: string;
+  target_honeypots: string[];
+  attacker_ip: string;
+  target_ip: string;
+  trial_kind: "attack" | "control";
+  expected_detection: string | null;
+  status: string;
+  result?: string | null;
+  observed_detection?: boolean | null;
+  detection_latency_seconds?: number | null;
+  evidence_latency_seconds?: number | null;
+  processing_latency_seconds?: number | null;
+  settle_wait_seconds?: number | null;
+  result_reason?: string | null;
+  ground_truth_valid?: boolean;
+  runner_status?: string | null;
+  run_id?: string | null;
+  event_ids?: string[];
+  session_ids?: string[];
+  detection_ids?: string[];
+  objective?: string | null;
+  hypothesis?: string | null;
+  condition?: string | null;
+  tags?: string[];
+  evaluation_batch_id?: string | null;
+  archived?: boolean;
+}
+
+export interface CountBucket { name: string; count: number }
+export interface AnalyticsOverview {
+  range_minutes: number;
+  totals: { events: number; sessions: number; detections: number; unique_sources: number; failed_auth_attempts: number; multi_service_sessions: number };
+  events_over_time: { time: string; count: number }[];
+  honeypots: CountBucket[]; protocols: CountBucket[]; categories: CountBucket[]; actions: CountBucket[]; outcomes: CountBucket[];
+  top_sources: CountBucket[]; auth_outcomes: CountBucket[]; detection_severity: CountBucket[]; detection_types: CountBucket[];
+  source_honeypot_matrix: { source: string; honeypots: Record<string, number> }[];
+  sessions: SessionSummary[]; recent_detections: DetectionSummary[]; recent_events: Record<string, unknown>[];
+}
+
+export interface SessionSummary {
+  session_id?: string; source_ip?: string; start_time?: string; end_time?: string; duration?: number; event_count?: number;
+  honeypots_touched?: string[]; protocols?: string[]; failed_authentication_attempts?: number;
+}
+export interface DetectionSummary { detection_id?: string; timestamp?: string; severity?: string; type?: string; source_ip?: string; session_id?: string; rule_id?: string; reason?: string; confidence?: number; policy_version?: string }
+
+export interface PolicyGeneration { policy_version?: string; trained_at?: string; source?: string; training_example_count?: number; feature_schema_version?: string; experiments_used?: number; active?: boolean; validation_macro_f1?: number | null; baseline_macro_f1?: number | null }

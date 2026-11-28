@@ -1,0 +1,37 @@
+id = "air-handler"
+version = 1
+name = "Altair AHU-9 Air Handling Unit"
+device_type = "building_controller"
+vendor = "Altair Climate"
+model = "AHU-9"
+firmware = "6.0.3"
+description = "BACnet/IP air handler controller with a maintenance web UI."
+
+[fingerprint]
+hostname = "ahu9-roof"
+
+[credentials]
+accept = [["admin", "admin"], ["service", "service"]]
+
+[[services]]
+name = "bacnet"
+plugin = "bacnet"
+port = 47808
+public_port = 47808
+
+[services.options]
+device_instance = 90021
+vendor_id = 245
+
+[[services]]
+name = "web"
+plugin = "http-device"
+port = 8098
+public_port = 8098
+
+[services.options.pages."/"]
+body = "<html><title>AHU-9</title><body><h1>$name</h1><form method='post' action='/login'><input name='username'><input name='password' type='password'></form></body></html>"
+
+[services.options.pages."/trend"]
+auth = true
+body = "<html><body><p>Supply air 14.2 C</p></body></html>"

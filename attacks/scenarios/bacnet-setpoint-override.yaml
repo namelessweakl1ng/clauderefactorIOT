@@ -1,0 +1,14 @@
+id: bacnet-setpoint-override
+name: BACnet setpoint override
+description: 'Discover the air handler, then WriteProperty a present-value at priority 8: an unauthorised HVAC setpoint change.'
+trial_kind: attack
+target_services:
+- bacnet
+expected_detection: ICS_WRITE
+severity: high
+models: T0846 -> T0836
+steps:
+- service: bacnet
+  services:
+  - who_is
+  - write_property
